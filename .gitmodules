@@ -1,0 +1,3 @@
+[submodule "modules/VeritasData"]
+	path = modules/VeritasData
+	url = https://www.github.com/Silexars/VeritasData
