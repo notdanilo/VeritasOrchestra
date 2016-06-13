@@ -3,9 +3,9 @@
 using Veritas::Orchestra::Message;
 using Veritas::Data::String;
 
-Message& Message::set(const String& field, void *data) {
+Message& Message::set(const String& field, const Veritas::any& data) {
     map[field] = data;
     return *this;
 }
 
-void* Message::get(const String& field) const { return (void*) const_cast<Message*>(this)->map[field]; }
+Veritas::any Message::get(const String& field) const { return const_cast<Message*>(this)->map[field]; }

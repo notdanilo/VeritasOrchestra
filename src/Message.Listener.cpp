@@ -10,22 +10,19 @@ Message::Listener::~Listener() {
     }
 }
 
-Message::Listener::Callback::Callback(void (*f)(const Message &), void *userData) {
-    this->f = f;
-    this->userData = userData;
-}
+Message::Listener::Callback::Callback(void (*f)(const Message &), const any &callbackData) : f(f), callbackData(callbackData) {}
 void Message::Listener::Callback::operator()(Message &m) {
-    m.set("Callback-Data", userData);
+    m.set("Callback-Data", callbackData);
     f(m);
 }
 
-void Message::Listener::on(const Veritas::Data::String &message, void (*callback)(const Message&), void* CallbackData) {
+void Message::Listener::on(const Veritas::Data::String &message, void (*callback)(const Message&), const any& callbackData) {
     Callbacks* callbacks = map[message];
     if (!callbacks) {
         callbacks = new Callbacks();
         map[message] = callbacks;
     }
-    callbacks->push_back(Callback(callback, CallbackData));
+    callbacks->push_back(Callback(callback, callbackData));
 }
 void Message::Listener::dispatch(const Veritas::Data::String& messageName) const {
     Message m;
