@@ -25,12 +25,12 @@ void Message::Listener::on(const Veritas::Data::String &message, void (*callback
     callbacks->push_back(Callback(callback, callbackData));
 }
 void Message::Listener::dispatch(const Veritas::Data::String& messageName) const {
-    Message m;
-    dispatch(messageName, m);
+    Message m(messageName);
+    dispatch(m);
 }
 
-void Message::Listener::dispatch(const Veritas::Data::String& messageName, Message &message) const {
-    Callbacks* callbacks = const_cast<Listener*>(this)->map[messageName];
+void Message::Listener::dispatch(Message &message) const {
+    Callbacks* callbacks = const_cast<Listener*>(this)->map[message.getName()];
     if (callbacks)
         for (Callbacks::iterator it = callbacks->begin(); it != callbacks->end(); it++) {
             Callback f = *it;

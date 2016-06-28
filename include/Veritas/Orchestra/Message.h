@@ -29,10 +29,14 @@ namespace Veritas {
                         typedef std::map<Veritas::Data::String, Callbacks*> CallbacksMap;
                         friend class Message;
                         void dispatch(const Veritas::Data::String& messageName) const;
-                        void dispatch(const Veritas::Data::String& messageName, Message &message) const;
+                        void dispatch(Message &message) const;
 
                         CallbacksMap map;
                 };
+                Message(const Veritas::Data::String& name);
+
+                void setName(const Veritas::Data::String& name);
+                Veritas::Data::String getName() const;
 
                 Message& set(const Veritas::Data::String& field, const Veritas::any& any);
                 Veritas::any get(const Veritas::Data::String& field) const;
@@ -41,9 +45,10 @@ namespace Veritas {
                 T get(const Veritas::Data::String& field) const { return any_cast<T>(get(field)); }
 
                 template <class T>
-                void dispatch(T* target, const Veritas::Data::String& name) { set("Target", target); ((Listener*) target)->dispatch(name, *this); set("Target", 0); }
+                void dispatch(T* target) { set("Target", target); ((Listener*) target)->dispatch(*this); set("Target", 0); }
 
             private:
+                Veritas::Data::String name;
                 std::map<Veritas::Data::String, Veritas::any> map;
         };
     }
