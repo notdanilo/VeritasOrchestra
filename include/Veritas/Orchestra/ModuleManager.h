@@ -27,3 +27,6 @@ namespace Veritas {
         };
     }
 }
+
+Veritas::Orchestra::Module* EntryPoint();
+#define SET_ENTRY_POINT(EP) Veritas::Orchestra::Module* EntryPoint() { return new EP(); }

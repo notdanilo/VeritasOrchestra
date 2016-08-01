@@ -16,3 +16,10 @@ void ModuleManager::run() {
 }
 
 ModuleManager& ModuleManager::getInstance() { return manager; }
+
+int main(int argc, char **argv) {
+    Module *module = EntryPoint();
+    ModuleManager::getInstance().add(module);
+    while (1) ModuleManager::manager.run();
+    delete module;
+}
