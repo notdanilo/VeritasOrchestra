@@ -12,7 +12,7 @@ Message::Listener::~Listener() {
 
 Message::Listener::Callback::Callback(void (*f)(const Message &), const any &callbackData) : f(f), callbackData(callbackData) {}
 void Message::Listener::Callback::operator()(Message &m) {
-    m.set("Callback-Data", callbackData);
+    m.setCallbackData(callbackData);
     f(m);
 }
 
@@ -24,13 +24,17 @@ void Message::Listener::on(const Veritas::Data::String &message, void (*callback
     }
     callbacks->push_back(Callback(callback, callbackData));
 }
-void Message::Listener::dispatch(const Veritas::Data::String& messageName) const {
-    Message m(messageName);
-    dispatch(m);
-}
 
-void Message::Listener::dispatch(Message &message) const {
+void Message::Listener::receive(Message &message) const {
     Callbacks* callbacks = const_cast<Listener*>(this)->map[message.getName()];
+    if (callbacks)
+        for (Callbacks::iterator it = callbacks->begin(); it != callbacks->end(); it++) {
+            Callback f = *it;
+            f(message);
+        }
+
+    // Everything will be redirected to ""
+    callbacks = const_cast<Listener*>(this)->map[""];
     if (callbacks)
         for (Callbacks::iterator it = callbacks->begin(); it != callbacks->end(); it++) {
             Callback f = *it;

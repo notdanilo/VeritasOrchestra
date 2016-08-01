@@ -28,8 +28,8 @@ namespace Veritas {
                         typedef std::list<Callback> Callbacks;
                         typedef std::map<Veritas::Data::String, Callbacks*> CallbacksMap;
                         friend class Message;
-                        void dispatch(const Veritas::Data::String& messageName) const;
-                        void dispatch(Message &message) const;
+
+                        void receive(Message &message) const;
 
                         CallbacksMap map;
                 };
@@ -38,6 +38,10 @@ namespace Veritas {
                 void setName(const Veritas::Data::String& name);
                 Veritas::Data::String getName() const;
 
+                Veritas::any getSource() const;
+                Veritas::any getDestiny() const;
+                Veritas::any getCallbackData() const;
+
                 Message& set(const Veritas::Data::String& field, const Veritas::any& any);
                 Veritas::any get(const Veritas::Data::String& field) const;
 
@@ -45,11 +49,24 @@ namespace Veritas {
                 T get(const Veritas::Data::String& field) const { return any_cast<T>(get(field)); }
 
                 template <class T>
-                void dispatch(T* target) { set("Target", target); ((Listener*) target)->dispatch(*this); set("Target", 0); }
+                void dispatch(T* source, T* destiny) {
+                    setSource(source);
+                    setDestiny(destiny);
 
+                    ((Listener*) destiny)->receive(*this);
+
+                    setSource(Veritas::any());
+                    setDestiny(Veritas::any());
+                }
             private:
+                Message& setSource(Veritas::any source);
+                Message& setDestiny(Veritas::any destiny);
+                Message& setCallbackData(Veritas::any callbackData);
+
                 Veritas::Data::String name;
                 std::map<Veritas::Data::String, Veritas::any> map;
+
+                Veritas::any source, destiny, callbackData;
         };
     }
 }
