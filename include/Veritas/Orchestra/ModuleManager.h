@@ -1,32 +1,33 @@
 #pragma once
 
 #include "Module.h"
-
-int main(int argc, char **argv);
+#include <thread>
 
 namespace Veritas {
     namespace Orchestra {
         class ModuleManager : public Module {
             public:
-                void add(Module *module);
-                void remove(Module *module);
-
-                static ModuleManager& getInstance();
-            private:
-                friend int ::main(int argc, char **argv);
-
                 ModuleManager();
                 ~ModuleManager();
 
+                void add(Module *module);
+                void remove(Module *module);
+
                 void run();
+
+                static ModuleManager* getLocalInstance();
+            private:
+                ModuleManager(bool MAIN_THREAD);
+                static void setLocalInstance(ModuleManager *mm);
 
                 typedef std::list<Module*> Modules;
                 Modules modules;
 
-                thread_local static ModuleManager manager;
+                std::thread thread;
+                static void threadf(ModuleManager *mm);
+
+                static ModuleManager mainManager;
+                thread_local static ModuleManager* manager;
         };
     }
 }
-
-Veritas::Orchestra::Module* EntryPoint();
-#define SET_ENTRY_POINT(EP) Veritas::Orchestra::Module* EntryPoint() { return new EP(); }
