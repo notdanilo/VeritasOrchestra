@@ -3,7 +3,9 @@
 using namespace Veritas;
 using namespace Orchestra;
 
-Module::Module() {}
+using Clock = std::chrono::high_resolution_clock;
+
+Module::Module() : runInterval(0.0f), t0(Clock::now()) {}
 Module::~Module() {}
 
 bool Module::isConnectedTo(Module *module) {
@@ -44,3 +46,6 @@ bool Module::disconnect(Module *module) {
 }
 
 void Module::run() {}
+
+void Module::setRunInterval(float64 seconds) { runInterval = seconds; }
+float64 Module::getRunInterval() const { return runInterval; }
