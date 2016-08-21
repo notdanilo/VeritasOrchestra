@@ -16,8 +16,8 @@ ModuleManager::ModuleManager(bool MAIN_THREAD) {
 
 ModuleManager::~ModuleManager() {}
 
-void ModuleManager::add(Module *module) { modules.push_back(module); }
-void ModuleManager::remove(Module *module) { modules.remove(module); }
+void ModuleManager::add(LocalModule *module) { modules.push_back(module); }
+void ModuleManager::remove(LocalModule *module) { modules.remove(module); }
 
 #include <chrono>
 using Clock = std::chrono::high_resolution_clock;
@@ -26,8 +26,8 @@ using Clock = std::chrono::high_resolution_clock;
 // Create MainModuleManager with public run
 void ModuleManager::run() {
     // Implement message handling and stuff
-    for (Modules::iterator it = modules.begin(); it != modules.end(); it++) {
-        Module *module = *it;
+    for (LocalModules::iterator it = modules.begin(); it != modules.end(); it++) {
+        LocalModule *module = *it;
 
         auto t1 = Clock::now();
         auto duration = t1 - module->t0;

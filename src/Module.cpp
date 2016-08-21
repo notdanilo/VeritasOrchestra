@@ -1,11 +1,12 @@
 #include <Veritas/Orchestra/Module.h>
+#include <Veritas/Orchestra/ModuleManager.h>
 
 using namespace Veritas;
 using namespace Orchestra;
 
 using Clock = std::chrono::high_resolution_clock;
 
-Module::Module() : runInterval(0.0f), t0(Clock::now()) {}
+Module::Module() {}
 Module::~Module() {}
 
 bool Module::isConnectedTo(Module *module) {
@@ -44,8 +45,3 @@ bool Module::disconnect(Module *module) {
         return true;
     } else return false;
 }
-
-void Module::run() {}
-
-void Module::setRunInterval(float64 seconds) { runInterval = seconds; }
-float64 Module::getRunInterval() const { return runInterval; }

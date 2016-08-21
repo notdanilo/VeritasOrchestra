@@ -1,27 +1,29 @@
 #pragma once
 
-#include "Module.h"
+#include "LocalModule.h"
 #include <thread>
 
 namespace Veritas {
     namespace Orchestra {
-        class ModuleManager : public Module {
+        class ModuleManager : public LocalModule {
             public:
                 ModuleManager();
                 ~ModuleManager();
 
-                void add(Module *module);
-                void remove(Module *module);
-
-                void run();
+                void run(); // Only the main-thread ModuleManager should expose this
 
                 static ModuleManager* getLocalInstance();
             private:
+                friend class LocalModule;
+
                 ModuleManager(bool MAIN_THREAD);
                 static void setLocalInstance(ModuleManager *mm);
 
-                typedef std::list<Module*> Modules;
-                Modules modules;
+                void add(LocalModule *module);
+                void remove(LocalModule *module);
+
+                typedef std::list<LocalModule*> LocalModules;
+                LocalModules modules;
 
                 std::thread thread;
                 static void threadf(ModuleManager *mm);
