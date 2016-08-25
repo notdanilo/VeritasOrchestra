@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Message.h"
+#include "Interfaceable.h"
 
 namespace Veritas {
     namespace Orchestra {
-        class Module : public Message::Listener {
+        class Module : public Interfaceable {
             public:
                 virtual ~Module();
 

@@ -11,13 +11,13 @@ Message::Listener::~Listener() {
     }
 }
 
-Message::Listener::Callback::Callback(void (*f)(const Message &), const any &callbackData) : f(f), callbackData(callbackData) {}
+Message::Listener::Callback::Callback(std::function<void(const Message& m)> callback, const any &callbackData) : callback(callback), callbackData(callbackData) {}
 void Message::Listener::Callback::operator()(Message &m) {
     m.setCallbackData(callbackData);
-    f(m);
+    callback(m);
 }
 
-void Message::Listener::on(const Veritas::Data::String &message, void (*callback)(const Message&), const any& callbackData) {
+void Message::Listener::on(const Veritas::Data::String &message, std::function<void(const Message& m)> callback, const any& callbackData) {
     Callbacks* callbacks = map[message];
     if (!callbacks) {
         callbacks = new Callbacks();

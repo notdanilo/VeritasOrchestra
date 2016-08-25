@@ -5,6 +5,7 @@
 #include <map>
 #include <iostream>
 #include <list>
+#include <functional>
 
 namespace Veritas {
     namespace Orchestra {
@@ -14,14 +15,14 @@ namespace Veritas {
                     public:
                         ~Listener();
 
-                        void on(const Veritas::Data::String& message, void (*callback)(const Message&), const Veritas::any& callbackData = Veritas::any());
+                        void on(const Veritas::Data::String& message, std::function<void(const Message&)> callback, const Veritas::any& callbackData = Veritas::any());
                     private:
                         struct Callback {
-                            Callback(void (*f)(const Message& m), const Veritas::any& callbackData);
+                            Callback(std::function<void(const Message& m)> callback, const Veritas::any& callbackData);
 
                             void operator()(Message& m);
 
-                            void (*f)(const Message& m);
+                            std::function<void(const Message& m)> callback;
                             Veritas::any callbackData;
                         };
 
@@ -42,6 +43,7 @@ namespace Veritas {
                 Veritas::any getDestiny() const;
                 Veritas::any getCallbackData() const;
 
+                Message& add(const Veritas::any& any);
                 Message& set(const Veritas::Data::String& field, const Veritas::any& any);
                 Veritas::any get(const Veritas::Data::String& field) const;
 
@@ -58,6 +60,9 @@ namespace Veritas {
                     setSource(Veritas::any());
                     setDestiny(Veritas::any());
                 }
+
+                typedef std::vector<Veritas::Data::String> SetOrder;
+                const SetOrder& getSetOrder() const;
             private:
                 Message& setSource(Veritas::any source);
                 Message& setDestiny(Veritas::any destiny);
@@ -65,6 +70,7 @@ namespace Veritas {
 
                 Veritas::Data::String name;
                 std::map<Veritas::Data::String, Veritas::any> map;
+                SetOrder order;
 
                 Veritas::any source, destiny, callbackData;
         };
