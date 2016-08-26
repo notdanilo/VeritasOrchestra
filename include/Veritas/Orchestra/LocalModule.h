@@ -33,6 +33,10 @@ namespace Veritas {
                     publish(MessageArgs(m, args...));
                 }
 
+                void publish(const Data::String& name) {
+                    publish(Message(name));
+                }
+
             private:
                 friend class ModuleManager;
 

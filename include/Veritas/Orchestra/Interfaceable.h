@@ -5,19 +5,19 @@
 #define OutputInterface(NAME, ...) \
     template <class ...Args> \
     void NAME (Args... args) { publish(#NAME, args...); } \
-    const bool NAME ## _INTERFACD = true
+    const bool NAME ## _INTERFACED = true
 
 #define InputInterface(NAME, ...) \
     void NAME (__VA_ARGS__); \
-    const bool NAME ## _INTERFACED = Interfaceable::add(#NAME, NAME, this)
+    const bool NAME ## _INTERFACED = Interfaceable::add(#NAME, &std::remove_pointer<decltype(this)>::type::NAME)
 
 namespace Veritas {
     namespace Orchestra {
         class Interfaceable : public Message::Listener {
             public:
                 template <class R, class C, class ...Args>
-                static bool add(const Veritas::Data::String& name, R (C::*method)(Args...), Interfaceable *object) {
-                    object->methodMap[name] = new any_method(method, (C*) object);
+                bool add(const Veritas::Data::String& name, R (C::*method)(Args...)) {
+                    methodMap[name] = new any_method(method, (C*) this);
                     return true;
                 }
 
