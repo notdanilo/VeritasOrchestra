@@ -2,6 +2,7 @@
 #include <Veritas/Orchestra/ModuleManager.h>
 
 using namespace Veritas::Orchestra;
+using namespace Messaging;
 
 LocalModule::LocalModule() : runInterval(0.0f), t0(Clock::now()) {
     ModuleManager *mm = ModuleManager::getLocalInstance();
@@ -19,7 +20,5 @@ void LocalModule::run() {}
 void LocalModule::setRunInterval(float64 seconds) { runInterval = seconds; }
 float64 LocalModule::getRunInterval() const { return runInterval; }
 
-void LocalModule::publish(const Message &message) {
-    Message msg = message;
-    msg.dispatch(this, this);
-}
+void LocalModule::publish(const Message &message) {}
+void LocalModule::send(const Module *module, const Message &message) {}

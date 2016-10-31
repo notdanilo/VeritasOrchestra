@@ -17,18 +17,6 @@ bool Module::isConnectedTo(Module *module) {
 
 bool Module::connect(Module *module) {
     if (!isConnectedTo(module)) {
-
-        // This implementation is incomplete and probably broken.
-        on("", [](const Message& m) {
-            Module* source = any_cast<Module*>(m.getSource());
-            Module* destiny = any_cast<Module*>(m.getDestiny());
-
-            if (source == destiny) {
-                Message message = m;
-                message.dispatch(source, any_cast<Module*>(m.getCallbackData()));
-            }
-        }, module);
-
         connections.push_back(module);
         module->connect(this);
         return true;

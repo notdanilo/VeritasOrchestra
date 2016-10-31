@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Message.h"
+#include "Messaging/Messaging.h"
 
-#include "Interfaceable.h"
 #include "Module.h"
 #include "RemoteModule.h"
 #include "LocalModule.h"

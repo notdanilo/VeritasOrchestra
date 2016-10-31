@@ -1,16 +1,17 @@
 #pragma once
 
-#include "Interfaceable.h"
+#include <Veritas/Data/String.h>
+#include <list>
 
 namespace Veritas {
     namespace Orchestra {
-        class Module : public Interfaceable {
+        class Module {
             public:
                 virtual ~Module();
 
                 bool isConnectedTo(Module* module);
                 bool connect(Module* module);
-                bool disconnect(Module* module);                
+                bool disconnect(Module* module);
             private:
                 friend class LocalModule;
                 friend class RemoteModule;
