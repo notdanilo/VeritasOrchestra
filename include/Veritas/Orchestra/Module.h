@@ -7,19 +7,13 @@ namespace Veritas {
     namespace Orchestra {
         class Module {
             public:
+                Module(void* address);
+                Module(const Data::String& address);
                 virtual ~Module();
 
-                bool isConnectedTo(Module* module);
-                bool connect(Module* module);
-                bool disconnect(Module* module);
+                const Data::String& getAddress() const;
             private:
-                friend class LocalModule;
-                friend class RemoteModule;
-
-                Module();
-
-                typedef std::list<Module*> Modules;
-                Modules connections;
+                Data::String address;
         };
     }
 }

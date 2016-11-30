@@ -13,6 +13,7 @@ namespace Veritas {
                 void run(); // Only the main-thread ModuleManager should expose this
 
                 static ModuleManager* getLocalInstance();
+            protected:
             private:
                 friend class LocalModule;
 
