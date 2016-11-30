@@ -16,8 +16,11 @@ namespace Veritas {
                     Message(const String& name);
                     ~Message();
 
-                    Message& setName(const String& name);
+                    // make it "const String&" will depend on changing "Content name"
                     String getName() const;
+
+                    Message& setOrigin(const String& origin);
+                    const String& getOrigin() const; // implement serialization/deserealization
 
                     Message& set(const String& field, const Content& content);
                     Message& set(const String& field, const String& content);
@@ -26,6 +29,7 @@ namespace Veritas {
                     Buffer serialize() const;
                 private:
                     Content name;
+                    String origin;
                     typedef std::map<String, Content> ContentMap;
                     ContentMap contents;
             };

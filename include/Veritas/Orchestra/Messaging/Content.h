@@ -45,9 +45,10 @@ namespace Veritas {
 
                     uint32 getSerialSize() const;
                     Buffer serialize() const;
+
+                    static const Content Empty;
                 private:
                     friend class Message;
-                    static Content Empty;
 
                     Encoding encoding;
                     Data::Buffer buffer;

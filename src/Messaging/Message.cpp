@@ -17,16 +17,12 @@ Message::Message(const Buffer &serializedMessage) : name(serializedMessage) {
 Message::Message(const String& name) : name(name) {}
 Message::~Message() {}
 
-Message& Message::setName(const String &name) {
-    this->name = name;
-    return *this;
+String Message::getName() const {
+    return name.getString();
 }
 
-String Message::getName() const {
-    String ret;
-    ret.getBuffer() = name.getBuffer();
-    return ret;
-}
+Message& Message::setOrigin(const String &origin) { this->origin = origin; }
+const String& Message::getOrigin() const { return origin; }
 
 Message& Message::set(const String &field, const String &content) { return set(field, Content(content)); }
 Message& Message::set(const String &field, const Content &content) {

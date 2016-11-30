@@ -6,7 +6,7 @@ using namespace Orchestra;
 using namespace Messaging;
 using namespace Data;
 
-Content Content::Empty;
+const Content Content::Empty;
 
 Content::Content() : encoding(Encoding::INT, 0) {}
 Content::Content(const  int8 content) : encoding(Encoding::INT, 0), buffer(1) { this->buffer.get<int8>(0) = content; }
@@ -27,10 +27,10 @@ Content::Content(const Buffer& serializedContent) : encoding(serializedContent) 
     for (uint32 i = 0; i < 4; i++)
         elements |= serializedContent.get<uint8>(i + 1) << i;
     buffer.setSize(elements * (1 << getEncoding().getExponent()));
-    buffer.copy(serializedContent, 5, buffer.getSize());
+    buffer.copy(serializedContent, buffer.getSize(), 5);
 }
 
-Encoding Content::getEncoding() const { return encoding; }
+Messaging::Encoding Content::getEncoding() const { return encoding; }
 uint32 Content::getElements() const { return buffer.getSize() / (1 << getEncoding().getExponent()); }
 
 int8  Content::getInt8(uint32 index) const { return buffer.get<int8>(index); }
@@ -58,6 +58,7 @@ Buffer Content::serialize() const {
         buffer.append(&belements, 1);
     }
 
+    #warning Implement it with bit shifting so it's endianness independent
     buffer.append(this->buffer);
     return buffer;
 }
