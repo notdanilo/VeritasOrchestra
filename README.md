@@ -1,5 +1,10 @@
-# VeritasOrchestra
+# Veritas Orchestra
+
 Veritas Orchestra is an (in-development) easily integrable (principle 1.) module system that abstracts processing context (principle 2.) and implements a messaging mechanism which makes it perfect for building modular (heh) distributed systems.
+
+# Usage example
+
+https://www.github.com/Silexars/VeritasFileSystem
 
 # Implemented features
 
@@ -15,6 +20,7 @@ Veritas Orchestra is an (in-development) easily integrable (principle 1.) module
 
 # Roadmap
 
+* Implement resource management mechanism;
 * Implement lists on Message;
 * Implement addressing on Message;
 * Implement the message routing mechanism for JNI;
