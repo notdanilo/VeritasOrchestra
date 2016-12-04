@@ -10,13 +10,14 @@ https://www.github.com/Silexars/VeritasFileSystem
 
 * API for modules;
    * Module interfacing;
-   * Module messaging;
+   * Module messaging;
 
 # Principles
 
 1. Make it easily integrable with any programming paradigm;
 2. Don't worry about module processing context (e.g. thread, process, local, remote);
 3. Make modules easily redistributable;
+4. Ontologic minimalism.
 
 # Roadmap
 
