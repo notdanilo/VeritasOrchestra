@@ -10,7 +10,7 @@ https://www.github.com/Silexars/VeritasFileSystem
 
 * API for modules;
    * Module interfacing;
-   * Module messaging;
+   * Module messaging;
 
 # Principles
 
