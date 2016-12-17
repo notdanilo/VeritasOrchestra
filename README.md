@@ -24,11 +24,14 @@ https://www.github.com/Silexars/VeritasFileSystem
 * Implement resource management mechanism;
 * Implement lists on Message;
 * Implement addressing on Message;
-* Implement the message routing mechanism for JNI;
-* Implement the message routing mechanism for thread -> process -> IP;
+* Implement protocol-agnostic message routing mechanism;
+* Implement message routing for JNI;
+* Implement message routing for thread;
+* Implement message routing for process;
+* Implement message routing for IP;
 * Create the concept of runtime;
    * Create the concept of runtime versioning;
 * Create the concept of packaging mechanism;
    * Create the concept of loading mechanism;
-   * Create the concept of modulee versioning;
+   * Create the concept of module versioning;
    * Create the concept of  module identification (unique naming).
