@@ -21,14 +21,25 @@ https://www.github.com/Silexars/VeritasFileSystem
 
 # Roadmap
 
-* Implement resource management mechanism;
+### Core
+
 * Implement lists on Message;
 * Implement addressing on Message;
 * Implement protocol-agnostic message routing mechanism;
+
+### Extensions
+
 * Implement message routing for JNI;
 * Implement message routing for thread;
 * Implement message routing for process;
 * Implement message routing for IP;
+
+### Utils
+
+* Implement resource management mechanism;
+
+### Design
+
 * Create the concept of runtime;
    * Create the concept of runtime versioning;
 * Create the concept of packaging mechanism;
