@@ -12,6 +12,8 @@ namespace Veritas {
                 virtual ~Module();
 
                 const Data::String& getAddress() const;
+
+                bool operator==(const Module& module);
             private:
                 Data::String address;
         };

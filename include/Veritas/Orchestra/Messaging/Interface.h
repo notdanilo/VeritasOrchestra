@@ -16,16 +16,10 @@ namespace Veritas {
                     Interface& operator=(Interface&& move);
 
                     const String& getName() const;
-                    void call(const Message& message);
 
                     Interface& require(const String& field);
-                    Interface& setCallback(std::function<void(const Message& message)> callback);
-
-                    template <class C>
-                    Interface& setCallback(void (C::*callback)(const Message& message), C *object) { return setCallback([object, callback](const Message& message) { (object->*callback)(message); }); }
                 private:
                     String name;
-                    std::function<void(const Message& message)> callback;
             };
         }
     }

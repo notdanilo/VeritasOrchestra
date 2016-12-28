@@ -2,24 +2,31 @@
 
 #include "Module.h"
 #include "Messaging/Messaging.h"
-#include "Messaging/Interface.h"
+#include "Messaging/InputInterface.h"
+#include "Messaging/OutputInterface.h"
 #include <chrono>
 
 namespace Veritas {
     namespace Orchestra {
         using Data::String;
         using Messaging::Message;
-        using Messaging::Interface;
+        using Messaging::InputInterface;
+        using Messaging::OutputInterface;
         class LocalModule : public Module {
             public:
-                typedef std::list<Interface> Interfaces;
+                typedef std::map<String, InputInterface> InputInterfaces;
+                typedef std::map<String, OutputInterface> OutputInterfaces;
 
                 LocalModule();
                 ~LocalModule();
 
-                void set(const Interface& interface);
-                void set(Interface&& interface);
-                const Interfaces& getInterfaces() const;
+                void set(const InputInterface& interface);
+                void set(InputInterface&& interface);
+                const InputInterfaces& getInputInterfaces() const;
+
+                void set(const OutputInterface& interface);
+                void set(OutputInterface&& interface);
+                const OutputInterfaces& getOutputInterfaces() const;
 
                 void send(const Module* module, Message& message);
                 void send(const Module* module, Message&& message);
@@ -33,16 +40,11 @@ namespace Veritas {
 
                 void setRunInterval(float64 runInterval);
                 float64 getRunInterval() const;
-                void virtual run();
 
-                bool isConnectedTo(Module* module);
-                bool connect(Module* module);
-                bool disconnect(Module* module);
-                friend class LocalModule;
-                friend class RemoteModule;
-
-                typedef std::list<Module*> Modules;
+                typedef std::list<Module> Modules;
                 Modules connections;
+            protected:
+                void virtual run();
             private:
                 friend class ModuleManager;
 
@@ -50,7 +52,16 @@ namespace Veritas {
                 using Clock = std::chrono::high_resolution_clock;
                 Clock::time_point t0;
 
-                Interfaces interfaces;
+                InputInterfaces inputInterfaces;
+                OutputInterfaces outputInterfaces;
+
+                void RequestConnection(const Messaging::Message& message);
+                void NotifyConnection(const Messaging::Message& message);
+
+                void RequestDisconnection(const Messaging::Message& message);
+                void NotifyDisconnection(const Messaging::Message& message);
+
+                void RequestInterfaces(const Messaging::Message& message);
         };
     }
 }

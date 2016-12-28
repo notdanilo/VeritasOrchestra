@@ -14,3 +14,5 @@ Module::Module(const String &address) : address(address) {}
 Module::~Module() {}
 
 const String& Module::getAddress() const { return address; }
+
+bool Module::operator==(const Module& module) { return getAddress() == module.getAddress(); }
