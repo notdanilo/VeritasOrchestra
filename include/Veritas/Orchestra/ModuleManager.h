@@ -5,7 +5,7 @@
 
 namespace Veritas {
     namespace Orchestra {
-        class ModuleManager : public LocalModule {
+        class ModuleManager {
             public:
                 ModuleManager();
                 ~ModuleManager();
@@ -13,7 +13,6 @@ namespace Veritas {
                 void run(); // Only the main-thread ModuleManager should expose this
 
                 static ModuleManager* getLocalInstance();
-            protected:
             private:
                 friend class LocalModule;
 

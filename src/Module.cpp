@@ -8,11 +8,12 @@ using namespace Veritas;
 using namespace Orchestra;
 using namespace Data;
 using namespace Encoding;
+using namespace Messaging;
 
-Module::Module(void *address) : Module(Base16().encode(&address, sizeof(address))) {}
-Module::Module(const String &address) : address(address) {}
+Module::Module(const Address &address) : address(address) {}
+Module::Module(Address &&address) : address(std::move(address)) {}
 Module::~Module() {}
 
-const String& Module::getAddress() const { return address; }
+const Address& Module::getAddress() const { return address; }
 
 bool Module::operator==(const Module& module) { return getAddress() == module.getAddress(); }

@@ -1,37 +1,48 @@
 #pragma once
 
 #include <Veritas/Data/String.h>
-#include <map>
-
 #include "Content.h"
+#include "Address.h"
 
 namespace Veritas {
     namespace Orchestra {
         namespace Messaging {
-            using Veritas::Data::String;
-            using Veritas::Data::Buffer;
+            using Data::String;
             class Message {
                 public:
-                    Message(const Buffer& serializedMessage);
-                    Message(const String& name);
+                    Message();
+                    Message(const Message& message);
+                    Message(Message&& message);
                     ~Message();
 
-                    // make it "const String&" will depend on changing "Content name"
-                    String getName() const;
+                    Message& operator=(const Message& message);
+                    Message& operator=(Message&& message);
 
-                    Message& setOrigin(const String& origin);
-                    const String& getOrigin() const; // implement serialization/deserealization
+                    // temporary
+                    Message& setInterface(const Data::String& interface);
+                    const Data::String& getInterface() const;
 
+                    Message& setOrigin(const Address& address);
+                    Message& setDestiny(const Address& address);
+
+                    const Address& getOrigin() const;
+                    const Address& getDestiny() const;
+
+                    Message& set(const Content& content);
+                    Message& set(Content&& content);
+                    const Content& getContent() const;
+                    Content& getContent();
+
+                    // Remove these three methods:
                     Message& set(const String& field, const Content& content);
-                    Message& set(const String& field, const String& content);
+                    Message& set(const String& field, Content&& content);
+                    template <class T> Message& set(const String& field, T&& content) { return set(field, Content(std::forward<T>(content))); }
                     const Content& get(const String& field) const;
-
-                    Buffer serialize() const;
                 private:
-                    Content name;
-                    String origin;
-                    typedef std::map<String, Content> ContentMap;
-                    ContentMap contents;
+                    Address origin, destiny;
+                    Content content;
+
+                    Data::String interface;
             };
         }
     }

@@ -4,10 +4,6 @@ using namespace Veritas;
 using namespace Orchestra;
 using namespace Messaging;
 
-Encoding::Encoding(const Buffer &serializedEncoding) {
-    info = serializedEncoding.get<uint8>(0);
-}
-
 Encoding::Encoding(TYPE type, uint8 exponent) {
     info = (type << 7) | (exponent & 0x7F);
 }

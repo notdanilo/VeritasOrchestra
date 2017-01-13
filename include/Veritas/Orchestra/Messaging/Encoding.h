@@ -10,7 +10,6 @@ namespace Veritas {
             class Encoding {
                 public:
                     enum TYPE { INT, FLOAT };
-                    Encoding(const Buffer& serializedEncoding);
                     Encoding(TYPE type, uint8 exponent);
 
                     TYPE getType() const;

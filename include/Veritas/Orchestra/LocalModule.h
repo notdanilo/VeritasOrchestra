@@ -2,41 +2,27 @@
 
 #include "Module.h"
 #include "Messaging/Messaging.h"
-#include "Messaging/InputInterface.h"
-#include "Messaging/OutputInterface.h"
+#include "Interfacing/InputInterface.h"
+#include "Interfacing/OutputInterface.h"
 #include <chrono>
+#include <map>
 
 namespace Veritas {
     namespace Orchestra {
-        using Data::String;
-        using Messaging::Message;
-        using Messaging::InputInterface;
-        using Messaging::OutputInterface;
         class LocalModule : public Module {
             public:
-                typedef std::map<String, InputInterface> InputInterfaces;
-                typedef std::map<String, OutputInterface> OutputInterfaces;
+                typedef std::map<Data::String, Interfacing::InputInterface*> InputInterfaces;
+                typedef std::map<Data::String, Interfacing::OutputInterface*> OutputInterfaces;
 
                 LocalModule();
                 ~LocalModule();
 
-                void set(const InputInterface& interface);
-                void set(InputInterface&& interface);
+                void set(Interfacing::InputInterface *interface);
+                void set(Interfacing::OutputInterface *interface);
                 const InputInterfaces& getInputInterfaces() const;
-
-                void set(const OutputInterface& interface);
-                void set(OutputInterface&& interface);
                 const OutputInterfaces& getOutputInterfaces() const;
 
-                void send(const Module* module, Message& message);
-                void send(const Module* module, Message&& message);
-                void send(const Module& module, Message& message);
-                void send(const Module& module, Message&& message);
-                void send(const String& address, Message& message);
-                void send(const String& address, Message&& message);
-                void publish(Message& message);
-                void publish(Message&& message);
-                void receive(const Message& message);
+                void receive(const Messaging::Message& message);
 
                 void setRunInterval(float64 runInterval);
                 float64 getRunInterval() const;
@@ -55,6 +41,7 @@ namespace Veritas {
                 InputInterfaces inputInterfaces;
                 OutputInterfaces outputInterfaces;
 
+                /*
                 void RequestConnection(const Messaging::Message& message);
                 void NotifyConnection(const Messaging::Message& message);
 
@@ -62,6 +49,7 @@ namespace Veritas {
                 void NotifyDisconnection(const Messaging::Message& message);
 
                 void RequestInterfaces(const Messaging::Message& message);
+                */
         };
     }
 }
