@@ -17,8 +17,11 @@ namespace Veritas {
                 LocalModule();
                 ~LocalModule();
 
+                // hide setters / unsetters
                 void set(Interfacing::InputInterface *interface);
                 void set(Interfacing::OutputInterface *interface);
+                void unset(Interfacing::InputInterface *interface);
+                void unset(Interfacing::OutputInterface *interface);
                 const InputInterfaces& getInputInterfaces() const;
                 const OutputInterfaces& getOutputInterfaces() const;
 

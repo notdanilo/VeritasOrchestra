@@ -7,19 +7,20 @@ namespace Veritas {
         namespace Interfacing {
             class InputInterface : public Interface {
                 public:
-                    InputInterface(const Data::String& name, LocalModule* module);
-                    InputInterface(const InputInterface& copy);
+                    typedef std::function<void(const Messaging::Message& message)> Callback;
+                    InputInterface(const Data::String& name, LocalModule* module, Callback callback);
+                    template <class C> InputInterface(const Data::String& name, C* module, void (C::*callback)(const Messaging::Message& message)) : InputInterface(name, module, [module, callback](const Messaging::Message& message) { (module->*callback)(message); }) {}
+                    InputInterface(const InputInterface& copy) = delete;
                     InputInterface(InputInterface&& move);
                     ~InputInterface();
 
-                    InputInterface& operator=(const InputInterface& copy);
+                    InputInterface& operator=(const InputInterface& copy) = delete;
                     InputInterface& operator=(InputInterface&& move);
 
-                    InputInterface& setCallback(std::function<void(const Messaging::Message& message)> callback);
-                    template <class C> InputInterface& setCallback(void (C::*callback)(const Messaging::Message& message)) { return setCallback([this, callback](const Messaging::Message& message) { (((C*) getModule())->*callback)(message); }); }
+                    // should only be accessible by LocalModule
                     void receive(const Messaging::Message& message);
                 private:
-                    std::function<void(const Messaging::Message& message)> callback;
+                    Callback callback;
             };
         }
     }

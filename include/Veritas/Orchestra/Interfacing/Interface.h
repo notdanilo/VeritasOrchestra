@@ -9,14 +9,12 @@ namespace Veritas {
             class Interface {
                 public:
                     Interface(const Data::String& name, LocalModule* module);
-                    Interface(const Interface& copy);
+                    Interface(const Interface& copy) = delete;
                     Interface(Interface&& move);
                     ~Interface();
 
-                    Interface& operator=(const Interface& copy);
+                    Interface& operator=(const Interface& copy) = delete;
                     Interface& operator=(Interface&& move);
-
-                    virtual void attach(LocalModule* module);
 
                     const Data::String& getName() const;
 

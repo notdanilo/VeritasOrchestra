@@ -9,15 +9,9 @@ using namespace Interfacing;
 
 using namespace Data;
 
-OutputInterface::OutputInterface(const String &name, LocalModule* module) : Interface(name, module), callback(0) {}
-OutputInterface::OutputInterface(const OutputInterface &copy) : Interface(copy), callback(copy.callback) {}
+OutputInterface::OutputInterface(const String &name, LocalModule* module, Callback callback) : Interface(name, module), callback(callback) {}
 OutputInterface::OutputInterface(OutputInterface &&move) : Interface(std::move(move)), callback(std::move(move.callback)) {}
 OutputInterface::~OutputInterface() {}
-
-OutputInterface& OutputInterface::setCallback(std::function<void (Message &)> callback) {
-    this->callback = callback;
-    return *this;
-}
 
 #warning Origin construction has its own complexity on publishing
 void OutputInterface::publish(Message &&message) const { publish(message); }

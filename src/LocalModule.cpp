@@ -27,8 +27,12 @@ LocalModule::~LocalModule() {
 
 void LocalModule::run() {}
 
-void LocalModule::set(InputInterface *interface) { inputInterfaces[interface->getName()] = interface; }
+void LocalModule::set(InputInterface *interface) {
+    inputInterfaces[interface->getName()] = interface;
+}
 void LocalModule::set(OutputInterface *interface) { outputInterfaces[interface->getName()] = interface; }
+void LocalModule::unset(InputInterface *interface) { inputInterfaces.erase(interface->getName()); }
+void LocalModule::unset(OutputInterface *interface) { outputInterfaces.erase(interface->getName()); }
 const LocalModule::OutputInterfaces& LocalModule::getOutputInterfaces() const { return outputInterfaces; }
 const LocalModule::InputInterfaces& LocalModule::getInputInterfaces() const { return inputInterfaces; }
 
