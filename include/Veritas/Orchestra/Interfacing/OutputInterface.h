@@ -9,8 +9,7 @@ namespace Veritas {
             class OutputInterface : public Interface {
                 public:
                     typedef std::function<void(Messaging::Message& message)> Callback;
-                    OutputInterface(const Data::String& name, LocalModule* module, Callback callback = 0);
-                    template <class C> OutputInterface(const Data::String& name, C* module, void (C::*callback)(Messaging::Message& message)) : OutputInterface(name, module, [module, callback](Messaging::Message& message) { (module->*callback)(message); }) {}
+                    OutputInterface(const Data::String& name, LocalModule* module);
                     OutputInterface(const OutputInterface& copy) = delete;
                     OutputInterface(OutputInterface&& move);
                     ~OutputInterface();
@@ -18,14 +17,10 @@ namespace Veritas {
                     OutputInterface& operator=(const OutputInterface& copy) = delete;
                     OutputInterface& operator=(OutputInterface&& move);
 
-                    void send(const Module& module, Messaging::Message& message) const;
-                    void send(const Module& module, Messaging::Message&& message = Messaging::Message()) const;
-                    void send(const Messaging::Address& address, Messaging::Message& message) const;
-                    void send(const Messaging::Address& address, Messaging::Message&& message = Messaging::Message()) const;
-                    void publish(Messaging::Message& message) const;
-                    void publish(Messaging::Message&& message = Messaging::Message()) const;
-                private:
-                    Callback callback;
+                    void send(const Module& module, const Messaging::Message& message) const;
+                    void send(const Module* module, const Messaging::Message& message) const;
+                    void send(const Messaging::Address& address, const Messaging::Message& message) const;
+                    void publish(const Messaging::Message& message) const;
             };
         }
     }

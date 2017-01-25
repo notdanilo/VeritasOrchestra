@@ -2,6 +2,7 @@
 #include <Veritas/Orchestra/Messaging/List.h>
 #include <Veritas/Orchestra/Messaging/Number.h>
 #include <Veritas/Orchestra/Messaging/Form.h>
+#include <Veritas/Orchestra/Messaging/Address.h>
 
 using namespace Veritas;
 using namespace Orchestra;
@@ -37,6 +38,8 @@ Content::Content(const String& content) : content(content), type(TEXT) {}
 Content::Content(const char* redirection) : Content(String(redirection)) {}
 Content::Content(const char16_t* redirection) : Content(String(redirection)) {}
 Content::Content(const char32_t* redirection) : Content(String(redirection)) {}
+
+Content::Content(const Address &content) : content(content), type(ADDRESS) {}
 Content::~Content() {}
 
 Content::operator Form&() { return any_cast<Form>(content); }
@@ -47,6 +50,7 @@ Content::operator const Form&() const { return any_cast<Form>(content); }
 Content::operator const List&() const { return any_cast<List>(content); }
 Content::operator const Number&() const { return any_cast<Number>(content); }
 Content::operator const String&() const { return any_cast<String>(content); }
+Content::operator const Address&() const { return any_cast<Address>(content); }
 
 Content& Content::operator=(const Content& content) {
     this->content = content.content;

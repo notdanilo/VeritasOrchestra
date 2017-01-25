@@ -8,36 +8,28 @@ using namespace Messaging;
 
 using namespace Data;
 
-ReplyInterface::ReplyInterface(const String &name, LocalModule *module, RequestCallback requestCallback, ReplyCallback replyCallback)
+ReplyInterface::ReplyInterface(const String &name, LocalModule *module, Callback callback)
     : Interface(name, module),
-      requestCallback(requestCallback),
-      replyCallback(replyCallback),
-      inputInterface(name, module, [this](const Message& message) { Request(message); }),
-      outputInterface(name, module, [this](Message& message) { Reply(message); }) {}
+      callback(callback),
+      inputInterface(String("Request-") + name, module, [this](const Message& message) { Request(message); }),
+      outputInterface(String("Reply-") + name, module) {}
 ReplyInterface::ReplyInterface(ReplyInterface &&move)
     : Interface(std::move(move)),
-      requestCallback(std::move(requestCallback)),
-      replyCallback(std::move(replyCallback)),
+      callback(std::move(callback)),
       inputInterface(std::move(move.inputInterface)),
       outputInterface(std::move(move.outputInterface)) {}
 ReplyInterface::~ReplyInterface() {}
 
-void ReplyInterface::Request(const Message &incoming) {
-    Message originalMessage = incoming;
-    originalMessage.set(incoming.get("OriginalContent"));
-
-    uint32 requestID = (Number) incoming.get("RequestID");
-    if (requestCallback) requestCallback(originalMessage, contextes[requestID]);
-    Message message = Message().set(requestID);
-    outputInterface.send(incoming.getOrigin(), message);
+void ReplyInterface::Request(const Message &message) {
+    uint32 requestID = (Number) message.get("RequestID");
+    addresses.emplace(requestID, message.getOrigin());
+    if (callback) callback(Message(message).set(message.get("Content")), Context(requestID));
 }
 
-void ReplyInterface::Reply(Message &message) {
-    uint32 requestID = (Number) message.getContent();
-    Message originalMessage;
-    if (replyCallback) replyCallback(originalMessage, contextes[requestID]);
-    contextes.erase(requestID);
-
-    message.set(Form().set("RequestID", requestID).set("OriginalContent", originalMessage.getContent()));
-
+void ReplyInterface::reply(uint32 requestID, const Message& message) {
+    try {
+        const Address& address = addresses.at(requestID);
+        outputInterface.send(address, Message().set("RequestID", requestID).set("Content", message.getContent()));
+        addresses.erase(requestID);
+    } catch (...) {}
 }

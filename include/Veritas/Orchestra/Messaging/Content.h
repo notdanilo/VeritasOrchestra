@@ -11,7 +11,7 @@ namespace Veritas {
             class Address;
             class Content {
                 public:
-                    enum TYPE { UNKNOWN, FORM, LIST, NUMBER, TEXT };
+                    enum TYPE { UNKNOWN, FORM, LIST, NUMBER, TEXT, ADDRESS };
 
                     Content();
                     Content(const Content& copy);

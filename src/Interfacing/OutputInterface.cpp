@@ -9,28 +9,23 @@ using namespace Interfacing;
 
 using namespace Data;
 
-OutputInterface::OutputInterface(const String &name, LocalModule* module, Callback callback) : Interface(name, module), callback(callback) {}
-OutputInterface::OutputInterface(OutputInterface &&move) : Interface(std::move(move)), callback(std::move(move.callback)) {}
+OutputInterface::OutputInterface(const String &name, LocalModule* module) : Interface(name, module) {}
+OutputInterface::OutputInterface(OutputInterface &&move) : Interface(std::move(move)) {}
 OutputInterface::~OutputInterface() {}
 
 #warning Origin construction has its own complexity on publishing
-void OutputInterface::publish(Message &&message) const { publish(message); }
-void OutputInterface::publish(Message &message) const {
+void OutputInterface::publish(const Message &message) const {
     //for (auto m: connections) send(m, Message(message));
 }
 
-void OutputInterface::send(const Address &address, Message& message) const { send(Module(address), message); }
-void OutputInterface::send(const Address &address, Message&& message) const { send(Module(address), std::move(message)); }
-void OutputInterface::send(const Module& module, Message&& message) const { send(module, message); }
-void OutputInterface::send(const Module &module, Message &message) const {
-    if (callback) callback(message);
-
-    message.setInterface(getName());
-    message.setOrigin(getModule()->getAddress().getString());
-    message.setDestiny(module.getAddress().getString());
-
+void OutputInterface::send(const Address &address, const Message& message) const { send(Module(address), message); }
+void OutputInterface::send(const Module* module, const Message& message) const { send(*module, message); }
+void OutputInterface::send(const Module& module, const Message& message) const {
     // Implement proper routing mechanism
     Buffer buffer = Encoding::Base16().decode(module.getAddress().getString());
     LocalModule* localmodule = (LocalModule*) *(uintptr_t*) buffer.getData();
-    localmodule->receive(message);
+    localmodule->receive(Message().setInterface(getName())
+                         .setOrigin(getModule()->getAddress())
+                         .setDestiny(module.getAddress())
+                         .set(message.getContent()));
 }

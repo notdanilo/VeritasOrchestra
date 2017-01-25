@@ -4,6 +4,7 @@
 #include "Messaging/Messaging.h"
 #include "Interfacing/InputInterface.h"
 #include "Interfacing/OutputInterface.h"
+#include "Interfacing/Interfacer.h"
 #include <chrono>
 #include <map>
 
@@ -14,6 +15,7 @@ namespace Veritas {
                 typedef std::map<Data::String, Interfacing::InputInterface*> InputInterfaces;
                 typedef std::map<Data::String, Interfacing::OutputInterface*> OutputInterfaces;
 
+                //LocalModule(const Interfacing::Interfacer& interfacer);
                 LocalModule();
                 ~LocalModule();
 
@@ -44,6 +46,7 @@ namespace Veritas {
                 InputInterfaces inputInterfaces;
                 OutputInterfaces outputInterfaces;
 
+                //const Interfacing::Interfacer& interfacer;
                 /*
                 void RequestConnection(const Messaging::Message& message);
                 void NotifyConnection(const Messaging::Message& message);
