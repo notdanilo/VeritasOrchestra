@@ -7,7 +7,7 @@ using namespace Data;
 using namespace Messaging;
 using namespace Interfacing;
 
-LocalModule::LocalModule() : Module(this), runInterval(0.0f), t0(Clock::now()) {
+LocalModule::LocalModule(const Interfacer& interfacer) : Module(this), interfacer(interfacer), runInterval(0.0f), t0(Clock::now()) {
     //set(InputInterface("RequestConnection").setCallback(&LocalModule::RequestConnection, this));
     //set(InputInterface("NotifyConnection").setCallback(&LocalModule::NotifyConnection, this));
     //set(InputInterface("RequestDisconnection").setCallback(&LocalModule::RequestDisconnection, this));
@@ -37,14 +37,19 @@ const LocalModule::OutputInterfaces& LocalModule::getOutputInterfaces() const { 
 const LocalModule::InputInterfaces& LocalModule::getInputInterfaces() const { return inputInterfaces; }
 
 void LocalModule::receive(const Message &message) {
+    /*
     String interfaceName = message.getInterface();
     try {
         inputInterfaces.at(interfaceName)->receive(message);
-    } catch (...) {
-        // infinite loop if the module doesn't has the NotifyReport InputInterface
-        // send(message.getOrigin(), Message("NotifyReport").set("Report", "Interface not found."));
-    }
+    } catch (...) {}
+    */
+    try {
+        String interfaceName = message.getInterface();
+        getInterfacer().getInputInterfaces().at(interfaceName).receive(message, this);
+    } catch (...) {}
 }
+
+const Interfacer& LocalModule::getInterfacer() const { return interfacer; }
 
 void LocalModule::setRunInterval(float64 seconds) { runInterval = seconds; }
 float64 LocalModule::getRunInterval() const { return runInterval; }

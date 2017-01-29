@@ -8,19 +8,21 @@ namespace Veritas {
             class InputInterface : public Interface {
                 public:
                     typedef std::function<void(const Messaging::Message& message)> Callback;
-                    InputInterface(const Data::String& name, LocalModule* module, Callback callback);
-                    template <class C> InputInterface(const Data::String& name, C* module, void (C::*callback)(const Messaging::Message& message)) : InputInterface(name, module, [module, callback](const Messaging::Message& message) { (module->*callback)(message); }) {}
-                    InputInterface(const InputInterface& copy) = delete;
+                    InputInterface(const Data::String &name, Callback callback);
+                    template <class C> InputInterface(const Data::String& name, void (C::*callback)(const Messaging::Message& message)) : Interface(name), callback([callback](const Messaging::Message& message, LocalModule* from) { (((C*) from)->*callback)(message); }) {} // using internals on template seems so wrong
+
+                    InputInterface(const InputInterface& copy);
                     InputInterface(InputInterface&& move);
                     ~InputInterface();
 
-                    InputInterface& operator=(const InputInterface& copy) = delete;
+                    InputInterface& operator=(const InputInterface& copy);
                     InputInterface& operator=(InputInterface&& move);
 
                     // should only be accessible by LocalModule
-                    void receive(const Messaging::Message& message);
+                    void receive(const Messaging::Message& message) const;
+                    void receive(const Messaging::Message& message, LocalModule* from) const;
                 private:
-                    Callback callback;
+                    std::function<void(const Messaging::Message& message, LocalModule* from)> callback;
             };
         }
     }

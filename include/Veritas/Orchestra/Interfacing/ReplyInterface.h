@@ -14,8 +14,8 @@ namespace Veritas {
             class ReplyInterface : public Interface {
                 public:
                     typedef std::function<void(const Messaging::Message& message, const Context& context)> Callback;
-                    ReplyInterface(const Data::String& name, LocalModule* module, Callback callback = 0);
-                    template <class C> ReplyInterface(const Data::String& name, C* module, void (C::*callback)(const Messaging::Message& message, const Context& context) = 0) : ReplyInterface(name, module, callback? [module, callback](const Messaging::Message& message, const Context& context) { (module->*callback)(message, context); } : Callback()) {}
+                    ReplyInterface(const Data::String& name, Callback callback = 0);
+                    //template <class C> ReplyInterface(const Data::String& name, void (C::*callback)(const Messaging::Message& message, const Context& context) = 0) : ReplyInterface(name, module, callback? [module, callback](const Messaging::Message& message, const Context& context) { (module->*callback)(message, context); } : Callback()) {}
                     ReplyInterface(const ReplyInterface& copy) = delete;
                     ReplyInterface(ReplyInterface&& move);
                     ~ReplyInterface();

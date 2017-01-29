@@ -15,9 +15,10 @@ namespace Veritas {
                 typedef std::map<Data::String, Interfacing::InputInterface*> InputInterfaces;
                 typedef std::map<Data::String, Interfacing::OutputInterface*> OutputInterfaces;
 
-                //LocalModule(const Interfacing::Interfacer& interfacer);
-                LocalModule();
+                LocalModule(const Interfacing::Interfacer& interfacer);
                 ~LocalModule();
+
+                const Interfacing::Interfacer& getInterfacer() const;
 
                 // hide setters / unsetters
                 void set(Interfacing::InputInterface *interface);
@@ -43,10 +44,10 @@ namespace Veritas {
                 using Clock = std::chrono::high_resolution_clock;
                 Clock::time_point t0;
 
+                const Interfacing::Interfacer& interfacer;
+
                 InputInterfaces inputInterfaces;
                 OutputInterfaces outputInterfaces;
-
-                //const Interfacing::Interfacer& interfacer;
                 /*
                 void RequestConnection(const Messaging::Message& message);
                 void NotifyConnection(const Messaging::Message& message);

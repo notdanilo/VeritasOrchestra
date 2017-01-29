@@ -8,11 +8,12 @@ using namespace Messaging;
 
 using namespace Data;
 
+/*
 RequestInterface::RequestInterface(const String &name, LocalModule *module, Callback callback)
     : Interface(name, module)
     , requestID(0)
     , callback(callback)
-    , inputInterface(String("Reply-") + name, module, [this](const Message& message) { Reply(message); })
+    , inputInterface(String("Reply-") + name, [this](const Message& message) { Reply(message); })
     , outputInterface(String("Request-") + name, module) {}
 RequestInterface::RequestInterface(RequestInterface &&move)
     : Interface(std::move(move))
@@ -33,6 +34,7 @@ void RequestInterface::request(const Module& module, const Message &message, con
 
     outputInterface.send(module, Message().set("RequestID", requestID).set("Content", message.getContent()));
 }
+*/
 
 void RequestInterface::Reply(const Message &message) {
     uint32 requestID = (Number) message.get("RequestID");

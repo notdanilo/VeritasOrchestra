@@ -9,18 +9,21 @@ namespace Veritas {
             class OutputInterface : public Interface {
                 public:
                     typedef std::function<void(Messaging::Message& message)> Callback;
+                    OutputInterface(const Data::String& name);
                     OutputInterface(const Data::String& name, LocalModule* module);
-                    OutputInterface(const OutputInterface& copy) = delete;
+                    OutputInterface(const OutputInterface& copy);
                     OutputInterface(OutputInterface&& move);
                     ~OutputInterface();
 
-                    OutputInterface& operator=(const OutputInterface& copy) = delete;
+                    OutputInterface& operator=(const OutputInterface& copy);
                     OutputInterface& operator=(OutputInterface&& move);
 
-                    void send(const Module& module, const Messaging::Message& message) const;
-                    void send(const Module* module, const Messaging::Message& message) const;
-                    void send(const Messaging::Address& address, const Messaging::Message& message) const;
-                    void publish(const Messaging::Message& message) const;
+                    void send(const Module& origin, const Module& destiny, const Messaging::Message& message) const;
+                    void send(const Module& origin, const Module* destiny, const Messaging::Message& message) const;
+                    void send(const Module* origin, const Module& destiny, const Messaging::Message& message) const;
+                    void send(const Module* origin, const Module* destiny, const Messaging::Message& message) const;
+                    void publish(const Module& origin, const Messaging::Message& message) const;
+                    void publish(const Module* origin, const Messaging::Message& message) const;
             };
         }
     }

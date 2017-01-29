@@ -8,11 +8,11 @@ using namespace Messaging;
 
 using namespace Data;
 
-ReplyInterface::ReplyInterface(const String &name, LocalModule *module, Callback callback)
-    : Interface(name, module),
+ReplyInterface::ReplyInterface(const String &name, Callback callback)
+    : Interface(name),
       callback(callback),
-      inputInterface(String("Request-") + name, module, [this](const Message& message) { Request(message); }),
-      outputInterface(String("Reply-") + name, module) {}
+      inputInterface(String("Request-") + name, [this](const Message& message) { Request(message); }),
+      outputInterface(String("Reply-") + name) {}
 ReplyInterface::ReplyInterface(ReplyInterface &&move)
     : Interface(std::move(move)),
       callback(std::move(callback)),
@@ -26,6 +26,7 @@ void ReplyInterface::Request(const Message &message) {
     if (callback) callback(Message(message).set(message.get("Content")), Context(requestID));
 }
 
+/*
 void ReplyInterface::reply(uint32 requestID, const Message& message) {
     try {
         const Address& address = addresses.at(requestID);
@@ -33,3 +34,4 @@ void ReplyInterface::reply(uint32 requestID, const Message& message) {
         addresses.erase(requestID);
     } catch (...) {}
 }
+*/
