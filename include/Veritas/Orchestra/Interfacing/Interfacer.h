@@ -4,23 +4,39 @@
 #include "OutputInterface.h"
 #include <map>
 
+#warning Create virtual Interface::clone (check Interfacer.cpp)
+
 namespace Veritas {
     namespace Orchestra {
         namespace Interfacing {
             class Interfacer {
                 public:
-                    typedef std::map<Data::String, Interfacing::InputInterface> InputInterfaces;
-                    typedef std::map<Data::String, Interfacing::OutputInterface> OutputInterfaces;
+                    typedef std::map<Data::String, Interface&> Interfaces;
 
-                    Interfacer& set(const OutputInterface& interface);
-                    Interfacer& set(const InputInterface& interface);
+                    Interfacer(const Interfacer& copy);
+                    Interfacer(Interfacer&& move);
+                    ~Interfacer();
 
-                    const InputInterfaces& getInputInterfaces() const;
-                    const OutputInterfaces& getOutputInterfaces() const;
+                    Interfacer& operator=(const Interfacer& copy);
+                    Interfacer& operator=(Interfacer&& move);
 
+                    template <class T>
+                    Interfacer& set(const Data::String& group, T&& t) {
+                        Interface* interface = new T(std::forward<T>(t));
+                        return set(group, interface);
+                    }
+
+                    const Interfaces* getInterfaces(const Data::String& group) const;
+                    Interfaces* getInterfaces(const Data::String &group);
                 private:
-                    InputInterfaces inputInterfaces;
-                    OutputInterfaces outputInterfaces;
+                    friend class Veritas::Orchestra::LocalModule;
+                    Interfacer();
+
+                    typedef std::map<Data::String, Interfaces> Group;
+                    Group groups;
+
+                    void erase();
+                    Interfacer& set(const Data::String& group, Interface* interface);
             };
         }
     }

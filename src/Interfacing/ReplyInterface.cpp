@@ -8,30 +8,35 @@ using namespace Messaging;
 
 using namespace Data;
 
+#warning Beautify lambda capture.
+
 ReplyInterface::ReplyInterface(const String &name, Callback callback)
-    : Interface(name),
-      callback(callback),
-      inputInterface(String("Request-") + name, [this](const Message& message) { Request(message); }),
-      outputInterface(String("Reply-") + name) {}
+    : Interface(name)
+    , callback(callback)
+    , inputInterface(String("Request-") + name, [this](const Message& message) { Request(message); })
+    , outputInterface(String("Reply-") + name)
+{}
+ReplyInterface::ReplyInterface(const ReplyInterface &copy)
+    : Interface(copy)
+    , callback(copy.callback)
+    , inputInterface(copy.inputInterface.getName(), [this](const Message& message) { Request(message); })
+    , outputInterface(copy.outputInterface)
+{}
 ReplyInterface::ReplyInterface(ReplyInterface &&move)
-    : Interface(std::move(move)),
-      callback(std::move(callback)),
-      inputInterface(std::move(move.inputInterface)),
-      outputInterface(std::move(move.outputInterface)) {}
+    : Interface(std::move(move))
+    , callback(std::move(move.callback))
+    , inputInterface(std::move(move.inputInterface))
+    , outputInterface(std::move(move.outputInterface))
+{
+    inputInterface = InputInterface(inputInterface.getName(), [this](const Message& message) { Request(message); });
+}
 ReplyInterface::~ReplyInterface() {}
 
-void ReplyInterface::Request(const Message &message) {
-    uint32 requestID = (Number) message.get("RequestID");
-    addresses.emplace(requestID, message.getOrigin());
-    if (callback) callback(Message(message).set(message.get("Content")), Context(requestID));
+void ReplyInterface::onSet(Interfacer *interfacer) {
+    interfacer->set("Input", (InputInterface) inputInterface);
+    interfacer->set("Output", (OutputInterface) outputInterface);
 }
 
-/*
-void ReplyInterface::reply(uint32 requestID, const Message& message) {
-    try {
-        const Address& address = addresses.at(requestID);
-        outputInterface.send(address, Message().set("RequestID", requestID).set("Content", message.getContent()));
-        addresses.erase(requestID);
-    } catch (...) {}
+void ReplyInterface::Request(const Message &message) {
+    if (callback) callback(Message(message).set(message.get("Content")), Replier(message));
 }
-*/

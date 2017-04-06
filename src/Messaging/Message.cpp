@@ -8,8 +8,8 @@ using namespace Messaging;
 using namespace Veritas::Data;
 
 Message::Message() {}
-Message::Message(const Message& message) : origin(message.origin), destiny(message.destiny), content(message.content) {}
-Message::Message(Message&& message) : origin(std::move(message.origin)), destiny(std::move(message.destiny)), content(std::move(message.content)) {}
+Message::Message(const Message& message) : origin(message.origin), destiny(message.destiny), content(message.content), interface(message.interface) {}
+Message::Message(Message&& message) : origin(std::move(message.origin)), destiny(std::move(message.destiny)), content(std::move(message.content)), interface(std::move(message.interface)) {}
 Message::~Message() {}
 
 Message& Message::set(const Content &content) {

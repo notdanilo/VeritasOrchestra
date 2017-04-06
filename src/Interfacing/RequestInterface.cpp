@@ -8,46 +8,65 @@ using namespace Messaging;
 
 using namespace Data;
 
-/*
-RequestInterface::RequestInterface(const String &name, LocalModule *module, Callback callback)
-    : Interface(name, module)
-    , requestID(0)
+RequestInterface::RequestInterface(const String& name, Callback callback)
+    : Interface(name)
     , callback(callback)
+    , outputInterface(String("Request-") + name)
     , inputInterface(String("Reply-") + name, [this](const Message& message) { Reply(message); })
-    , outputInterface(String("Request-") + name, module) {}
-RequestInterface::RequestInterface(RequestInterface &&move)
+    , requestID(0)
+{}
+RequestInterface::RequestInterface(const RequestInterface& copy)
+    : Interface(copy)
+    , callback(copy.callback)
+    , outputInterface(copy.outputInterface)
+    , inputInterface(copy.inputInterface.getName(), [this](const Message& message) { Reply(message); })
+    , contextes(copy.contextes)
+    , requestID(copy.requestID)
+{}
+RequestInterface::RequestInterface(RequestInterface&& move)
     : Interface(std::move(move))
-    , requestID(std::move(move.requestID))
     , callback(std::move(move.callback))
+    , outputInterface(std::move(move.outputInterface))
     , inputInterface(std::move(move.inputInterface))
-    , outputInterface(std::move(move.outputInterface)) {}
+    , contextes(std::move(move.contextes))
+    , requestID(std::move(move.requestID))
+{
+    inputInterface = InputInterface(inputInterface.getName(), [this](const Message& message) { Reply(message); });
+}
 RequestInterface::~RequestInterface() {}
 
-void RequestInterface::request(const Address &address, const Message& message, const Content& content) { request(Module(address), message, content); }
-void RequestInterface::request(const Module* module, const Message& message, const Content& content) { request(*module, message, content); }
-void RequestInterface::request(const Module& module, const Message &message, const Content& content) {
-    uint32 requestID = getRequestID();
-
-    auto emplace_pair = contextes.emplace(requestID, Context(requestID));
-    Context& context = (*emplace_pair.first).second;
-    context.setContent(content);
-
-    outputInterface.send(module, Message().set("RequestID", requestID).set("Content", message.getContent()));
-}
-*/
-
-void RequestInterface::Reply(const Message &message) {
-    uint32 requestID = (Number) message.get("RequestID");
-    try {
-        Context& context = contextes.at(requestID);
-
-        Message originalMessage = message;
-        originalMessage.set(message.get("Content"));
-
-        if (callback) callback(originalMessage, context);
-
-        contextes.erase(requestID);
-    } catch (...) {}
+void RequestInterface::onSet(Interfacer *interfacer) {
+    interfacer->set("Output", (OutputInterface) outputInterface);
+    interfacer->set("Input", (InputInterface) inputInterface);
 }
 
 uint32 RequestInterface::getRequestID() { return requestID++; }
+
+void RequestInterface::request(const LocalModule *origin, const Module *destiny, const Message &message, const any& context) { request(*origin, *destiny, message, context); }
+void RequestInterface::request(const LocalModule &origin, const Module *destiny, const Message &message, const any& context) { request(origin, *destiny, message, context); }
+void RequestInterface::request(const LocalModule *origin, const Module &destiny, const Message &message, const any& context) { request(*origin, destiny, message, context); }
+void RequestInterface::request(const LocalModule &origin, const Module &destiny, const Message &message, const any& context) {
+    uint32 requestID = getRequestID();
+    contextes.emplace(requestID, context);
+
+    const OutputInterface& outputInterface = (const OutputInterface&) origin.getClassInterfacer().getInterfaces("Output")->at(String("Request-") + getName());
+    outputInterface.send(origin, destiny,
+                        Message().setOrigin(message.getOrigin())
+                                 .setDestiny(message.getDestiny())
+                                 .set("RequestID", requestID)
+                                 .set("Content", message.getContent()));
+}
+
+void RequestInterface::Reply(const Message &message) {
+    if (callback) {
+        try {
+            uint32 requestID = (Number) message.get("RequestID");
+            const any& context = contextes.at(requestID);
+            callback(Message().setDestiny(message.getDestiny())
+                            .setOrigin(message.getOrigin())
+                            .setInterface(message.getInterface())
+                            .set(message.get("Content")), context);
+            contextes.erase(requestID);
+        } catch (...) {}
+    }
+}

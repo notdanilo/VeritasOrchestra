@@ -22,3 +22,5 @@ Interface& Interface::operator=(Interface&& move) {
 }
 
 const String& Interface::getName() const { return name; }
+
+void Interface::onSet(Interfacer *interfacer) {}

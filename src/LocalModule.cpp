@@ -1,76 +1,73 @@
 #include <Veritas/Orchestra/LocalModule.h>
 #include <Veritas/Orchestra/ModuleManager.h>
 
+#include <Veritas/Orchestra/Interfacing/Interfacing.h>
+
+#include <algorithm>
+
 using namespace Veritas;
 using namespace Orchestra;
 using namespace Data;
 using namespace Messaging;
 using namespace Interfacing;
 
-LocalModule::LocalModule(const Interfacer& interfacer) : Module(this), interfacer(interfacer), runInterval(0.0f), t0(Clock::now()) {
-    //set(InputInterface("RequestConnection").setCallback(&LocalModule::RequestConnection, this));
-    //set(InputInterface("NotifyConnection").setCallback(&LocalModule::NotifyConnection, this));
-    //set(InputInterface("RequestDisconnection").setCallback(&LocalModule::RequestDisconnection, this));
-    //set(InputInterface("NotifyDisconnection").setCallback(&LocalModule::NotifyDisconnection, this));
-    //set(OutputInterface("RequestDisconnection"));
+const Interfacer& LocalModule::getInterfacer() {
+    static Interfacer interfacer = Interfacer().set("Request", RequestInterface("Subscription"))
+                                               .set("Request", RequestInterface("Unsubscription"))
+                                               .set("Reply", ReplyInterface("Subscription", &LocalModule::SubscriptionRequest))
+                                               .set("Reply", ReplyInterface("Unsubscription", &LocalModule::UnsubscriptionRequest))
+                                               .set("Reply", ReplyInterface("Interfaces", &LocalModule::InterfacesRequest));
+    return interfacer;
+}
 
+LocalModule::LocalModule() : LocalModule(getInterfacer()) {}
+
+LocalModule::LocalModule(const Interfacer& interfacerRef) : Module(this), interfacerRef(interfacerRef), runInterval(0.0f), t0(Clock::now()) {
     ModuleManager *mm = ModuleManager::getLocalInstance();
     mm->add(this);
 }
 
 LocalModule::~LocalModule() {
-    //outputInterfaces.at("RequestDisconnection").publish();
-
     ModuleManager *mm = ModuleManager::getLocalInstance();
     mm->remove(this);
 }
 
 void LocalModule::run() {}
 
-void LocalModule::set(InputInterface *interface) {
-    inputInterfaces[interface->getName()] = interface;
-}
-void LocalModule::set(OutputInterface *interface) { outputInterfaces[interface->getName()] = interface; }
-void LocalModule::unset(InputInterface *interface) { inputInterfaces.erase(interface->getName()); }
-void LocalModule::unset(OutputInterface *interface) { outputInterfaces.erase(interface->getName()); }
-const LocalModule::OutputInterfaces& LocalModule::getOutputInterfaces() const { return outputInterfaces; }
-const LocalModule::InputInterfaces& LocalModule::getInputInterfaces() const { return inputInterfaces; }
-
 void LocalModule::receive(const Message &message) {
-    /*
-    String interfaceName = message.getInterface();
-    try {
-        inputInterfaces.at(interfaceName)->receive(message);
-    } catch (...) {}
-    */
     try {
         String interfaceName = message.getInterface();
-        getInterfacer().getInputInterfaces().at(interfaceName).receive(message, this);
+        const Interfacer::Interfaces* interfaces = getClassInterfacer().getInterfaces("Input");
+        if (interfaces) ((InputInterface&) interfaces->at(interfaceName)).receive(message);
     } catch (...) {}
 }
 
-const Interfacer& LocalModule::getInterfacer() const { return interfacer; }
+const Interfacer& LocalModule::getClassInterfacer() const { return interfacerRef; }
 
 void LocalModule::setRunInterval(float64 seconds) { runInterval = seconds; }
 float64 LocalModule::getRunInterval() const { return runInterval; }
 
-/*
-void LocalModule::RequestConnection(const Message &message) {
+
+void LocalModule::SubscriptionRequest(const Message &message, const Replier &replier) {    
     Module module(message.getOrigin());
-    connections.push_back(std::move(module));
-    outputInterfaces.at("NotifyConnection").send(module);
+
+    if (std::find(subscribers.begin(), subscribers.end(), module) == subscribers.end())
+        subscribers.push_back(module);
+
+    replier.reply();
 }
-void LocalModule::NotifyConnection(const Message& message) {
-    connections.push_back(Module(message.getOrigin()));
+void LocalModule::UnsubscriptionRequest(const Message& message, const Replier& replier) {
+    Module module(message.getOrigin());
+
+    auto it = std::find(subscribers.begin(), subscribers.end(), module);
+    if (it != subscribers.end())
+        subscribers.erase(it);
+
+    replier.reply();
 }
 
-void LocalModule::RequestDisconnection(const Message &message) {
-    Module module(message.getOrigin());
-    outputInterfaces.at("NotifyDisconnection").send(module);
-    connections.remove(module);
+void LocalModule::InterfacesRequest(const Message &message, const Replier &replier) {
+    replier.reply();
 }
 
-void LocalModule::NotifyDisconnection(const Message& message) {
-    connections.remove(Module(message.getOrigin()));
-}
-*/
+const LocalModule::Modules& LocalModule::getSubscribers() const { return subscribers; }

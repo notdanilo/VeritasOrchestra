@@ -22,6 +22,8 @@ namespace Veritas {
                     const Data::String& getString() const;
 
                     bool operator==(const Address& address) const;
+
+                    void* getLocalAddress() const;
                 private:
                     Data::String string;
             };

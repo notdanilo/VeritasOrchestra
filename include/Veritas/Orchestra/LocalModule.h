@@ -5,6 +5,7 @@
 #include "Interfacing/InputInterface.h"
 #include "Interfacing/OutputInterface.h"
 #include "Interfacing/Interfacer.h"
+#include "Interfacing/Replier.h"
 #include <chrono>
 #include <map>
 
@@ -14,49 +15,38 @@ namespace Veritas {
             public:
                 typedef std::map<Data::String, Interfacing::InputInterface*> InputInterfaces;
                 typedef std::map<Data::String, Interfacing::OutputInterface*> OutputInterfaces;
+                typedef std::vector<Module> Modules;
 
+                LocalModule();
                 LocalModule(const Interfacing::Interfacer& interfacer);
                 ~LocalModule();
 
-                const Interfacing::Interfacer& getInterfacer() const;
-
-                // hide setters / unsetters
-                void set(Interfacing::InputInterface *interface);
-                void set(Interfacing::OutputInterface *interface);
-                void unset(Interfacing::InputInterface *interface);
-                void unset(Interfacing::OutputInterface *interface);
-                const InputInterfaces& getInputInterfaces() const;
-                const OutputInterfaces& getOutputInterfaces() const;
+                const Interfacing::Interfacer& getClassInterfacer() const;
 
                 void receive(const Messaging::Message& message);
 
                 void setRunInterval(float64 runInterval);
                 float64 getRunInterval() const;
 
-                typedef std::list<Module> Modules;
-                Modules connections;
+                const Modules& getSubscribers() const;
             protected:
+                static const Interfacing::Interfacer& getInterfacer();
                 void virtual run();
             private:
+
                 friend class ModuleManager;
 
                 float64 runInterval;
                 using Clock = std::chrono::high_resolution_clock;
                 Clock::time_point t0;
 
-                const Interfacing::Interfacer& interfacer;
+                Modules subscribers;
 
-                InputInterfaces inputInterfaces;
-                OutputInterfaces outputInterfaces;
-                /*
-                void RequestConnection(const Messaging::Message& message);
-                void NotifyConnection(const Messaging::Message& message);
+                void InterfacesRequest(const Messaging::Message& message, const Interfacing::Replier& replier);
+                void SubscriptionRequest(const Messaging::Message& message, const Interfacing::Replier& replier);
+                void UnsubscriptionRequest(const Messaging::Message& message, const Interfacing::Replier& replier);
 
-                void RequestDisconnection(const Messaging::Message& message);
-                void NotifyDisconnection(const Messaging::Message& message);
-
-                void RequestInterfaces(const Messaging::Message& message);
-                */
+                const Interfacing::Interfacer& interfacerRef;
         };
     }
 }

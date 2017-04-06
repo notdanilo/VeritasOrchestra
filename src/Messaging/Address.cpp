@@ -29,3 +29,7 @@ Address& Address::operator=(Address&& address) {
     string = std::move(address.string);
     return *this;
 }
+
+void* Address::getLocalAddress() const {
+    return (void*) *(uintptr_t*) Encoding::Base16().decode(getString()).getData();
+}
