@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Veritas/Data/String.h>
+#include <Veritas/Orchestra/Messaging/Address.h>
 #include <list>
-#include "Messaging/Address.h"
 
 namespace Veritas {
     namespace Orchestra {

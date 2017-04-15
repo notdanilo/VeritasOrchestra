@@ -1,5 +1,5 @@
 #include <Veritas/Orchestra/Interfacing/ReplyInterface.h>
-#include <Veritas/Orchestra/LocalModule.h>
+#include <Veritas/Orchestra/Computing/LocalModule.h>
 
 using namespace Veritas;
 using namespace Orchestra;
@@ -7,8 +7,6 @@ using namespace Interfacing;
 using namespace Messaging;
 
 using namespace Data;
-
-#warning Beautify lambda capture.
 
 ReplyInterface::ReplyInterface(const String &name, Callback callback)
     : Interface(name)

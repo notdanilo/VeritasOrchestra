@@ -15,11 +15,10 @@ void MessageQueue::receive(Message&& message) {
     queue.emplace(std::move(message));
 }
 
-Message MessageQueue::consume() {
+Message MessageQueue::consume() throw(std::exception) {
     std::lock_guard<std::mutex> lock(mutex);
+    if (!queue.size()) throw std::exception();
     Message ans = queue.front();
     queue.pop();
     return ans;
 }
-
-uint32 MessageQueue::getAmmount() const { return queue.size(); }

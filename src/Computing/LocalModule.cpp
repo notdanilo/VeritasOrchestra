@@ -1,5 +1,6 @@
-#include <Veritas/Orchestra/LocalModule.h>
-#include <Veritas/Orchestra/ModuleManager.h>
+#include <Veritas/Orchestra/Computing/LocalModule.h>
+#include <Veritas/Orchestra/Computing/Manager.h>
+#include <Veritas/Orchestra/VO.h>
 
 #include <Veritas/Orchestra/Interfacing/Interfacing.h>
 
@@ -20,19 +21,15 @@ const Interfacer& LocalModule::getInterfacer() {
     return interfacer;
 }
 
+LocalModule& LocalModule::from(const Address &address) {
+    return *((LocalModule*) address.getLocalAddress());
+}
+
 LocalModule::LocalModule() : LocalModule(getInterfacer()) {}
 
-LocalModule::LocalModule(const Interfacer& interfacerRef) : Module(this), interfacerRef(interfacerRef), runInterval(0.0f), t0(Clock::now()) {
-    ModuleManager *mm = ModuleManager::getLocalInstance();
-    mm->add(this);
-}
+LocalModule::LocalModule(const Interfacer& interfacerRef) : Module(this), interfacerRef(interfacerRef) {}
 
-LocalModule::~LocalModule() {
-    ModuleManager *mm = ModuleManager::getLocalInstance();
-    mm->remove(this);
-}
-
-void LocalModule::run() {}
+LocalModule::~LocalModule() {}
 
 void LocalModule::receive(const Message &message) {
     try {
@@ -43,9 +40,6 @@ void LocalModule::receive(const Message &message) {
 }
 
 const Interfacer& LocalModule::getClassInterfacer() const { return interfacerRef; }
-
-void LocalModule::setRunInterval(float64 seconds) { runInterval = seconds; }
-float64 LocalModule::getRunInterval() const { return runInterval; }
 
 
 void LocalModule::SubscriptionRequest(const Message &message, const Replier &replier) {    

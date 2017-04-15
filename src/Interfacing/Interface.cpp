@@ -1,5 +1,5 @@
 #include <Veritas/Orchestra/Interfacing/Interface.h>
-#include <Veritas/Orchestra/LocalModule.h>
+#include <Veritas/Orchestra/Computing/LocalModule.h>
 
 using namespace Veritas;
 using namespace Orchestra;

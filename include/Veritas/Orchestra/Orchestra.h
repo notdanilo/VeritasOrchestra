@@ -2,8 +2,7 @@
 
 #include "Messaging/Messaging.h"
 #include "Interfacing/Interfacing.h"
+#include "Routing/Routing.h"
+#include "Computing/Computing.h"
 
-#include "Module.h"
-#include "LocalModule.h"
-
-#include "ModuleManager.h"
+#include "VO.h"

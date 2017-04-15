@@ -1,5 +1,5 @@
-#include <Veritas/Orchestra/Module.h>
-#include <Veritas/Orchestra/ModuleManager.h>
+#include <Veritas/Orchestra/Computing/Module.h>
+#include <Veritas/Orchestra/Computing/Manager.h>
 
 #include <Veritas/Definitions/Definitions.h>
 #include <Veritas/Data/Encoding/Encoding.h>

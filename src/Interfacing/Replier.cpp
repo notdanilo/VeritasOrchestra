@@ -1,6 +1,6 @@
 #include <Veritas/Orchestra/Interfacing/Replier.h>
 #include <Veritas/Orchestra/Messaging/Messaging.h>
-#include <Veritas/Orchestra/Module.h>
+#include <Veritas/Orchestra/Computing/Module.h>
 
 using namespace Veritas;
 using namespace Orchestra;

@@ -13,11 +13,9 @@ namespace Veritas {
         namespace Routing {
             class MessageQueue {
                 public:
-                    uint32 getAmmount() const;
-
                     void receive(const Messaging::Message& message);
                     void receive(Messaging::Message&& message);
-                    Messaging::Message consume();
+                    Messaging::Message consume() throw(std::exception);
                 private:
                     typedef std::queue<Messaging::Message> Queue;
                     std::mutex mutex;

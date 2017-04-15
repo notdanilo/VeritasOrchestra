@@ -2,7 +2,7 @@
 
 #include "Sender.h"
 #include "RequestInterface.h"
-#include <Veritas/Orchestra/LocalModule.h>
+#include <Veritas/Orchestra/Computing/LocalModule.h>
 
 namespace Veritas {
     namespace Orchestra {
