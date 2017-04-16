@@ -1,10 +1,13 @@
 #pragma once
 #include <functional>
-#include "../Messaging/Message.h"
+#include <Veritas/Orchestra/Messaging/Message.h>
 
 namespace Veritas {
     namespace Orchestra {
-        class LocalModule;
+        namespace Computing {
+            class Module;
+            class LocalModule;
+        }
         namespace Interfacing {
             class Interfacer;
             class Interface {
@@ -26,7 +29,7 @@ namespace Veritas {
                 private:
                     Data::String name;
 
-                    friend class Orchestra::LocalModule;
+                    friend class Orchestra::Computing::LocalModule;
             };
         }
     }

@@ -9,12 +9,12 @@ namespace Veritas {
         namespace Interfacing {
             class Requester {
                 public:
-                    Requester(LocalModule& module);
-                    Requester(LocalModule* module);
-                    void request(const Data::String& interface, const Module* module, const Messaging::Message& message = Messaging::Message(), const any& context = any());
-                    void request(const Data::String& interface, const Module& module, const Messaging::Message& message = Messaging::Message(), const any& context = any());
+                    Requester(Computing::LocalModule& module);
+                    Requester(Computing::LocalModule* module);
+                    void request(const Data::String& interface, const Computing::Module* module, const Messaging::Message& message = Messaging::Message(), const any& context = any());
+                    void request(const Data::String& interface, const Computing::Module& module, const Messaging::Message& message = Messaging::Message(), const any& context = any());
 
-                    const LocalModule& getModule() const;
+                    const Computing::LocalModule& getModule() const;
                 private:
                     Sender sender;
             };

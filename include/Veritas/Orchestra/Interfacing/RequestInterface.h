@@ -7,7 +7,6 @@
 
 namespace Veritas {
     namespace Orchestra {
-        class Module;
         namespace Interfacing {
             class RequestInterface : public Interface {
                 public:
@@ -22,10 +21,10 @@ namespace Veritas {
                     RequestInterface& operator=(RequestInterface&& move);
                 private:
                     friend class Requester;
-                    void request(const LocalModule& origin, const Module& destiny, const Messaging::Message& message, const any& context);
-                    void request(const LocalModule& origin, const Module* destiny, const Messaging::Message& message, const any& context);
-                    void request(const LocalModule* origin, const Module& destiny, const Messaging::Message& message, const any& context);
-                    void request(const LocalModule* origin, const Module* destiny, const Messaging::Message& message, const any& context);
+                    void request(const Computing::LocalModule& origin, const Computing::Module& destiny, const Messaging::Message& message, const any& context);
+                    void request(const Computing::LocalModule& origin, const Computing::Module* destiny, const Messaging::Message& message, const any& context);
+                    void request(const Computing::LocalModule* origin, const Computing::Module& destiny, const Messaging::Message& message, const any& context);
+                    void request(const Computing::LocalModule* origin, const Computing::Module* destiny, const Messaging::Message& message, const any& context);
 
                     void onSet(Interfacer *interfacer);
 

@@ -7,6 +7,7 @@ using namespace Orchestra;
 using namespace Routing;
 
 using namespace Messaging;
+using namespace Computing;
 
 Manager::Manager() : isrunning(true) {}
 

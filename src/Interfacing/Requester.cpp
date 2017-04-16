@@ -5,6 +5,7 @@ using namespace Data;
 using namespace Orchestra;
 using namespace Interfacing;
 using namespace Messaging;
+using namespace Computing;
 
 Requester::Requester(LocalModule* module) : Requester(*module) {}
 Requester::Requester(LocalModule& module) : sender(module) {}

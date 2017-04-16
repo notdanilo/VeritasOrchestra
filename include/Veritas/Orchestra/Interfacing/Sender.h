@@ -6,14 +6,14 @@ namespace Veritas {
         namespace Interfacing {
             class Sender {
                 public:
-                    Sender(const LocalModule& module);
-                    Sender(const LocalModule* module);
-                    void send(const Data::String& interface, const Module* destination, const Messaging::Message& message = Messaging::Message()) const;
-                    void send(const Data::String& interface, const Module& destination, const Messaging::Message& message = Messaging::Message()) const;
+                    Sender(const Computing::LocalModule& module);
+                    Sender(const Computing::LocalModule* module);
+                    void send(const Data::String& interface, const Computing::Module* destination, const Messaging::Message& message = Messaging::Message()) const;
+                    void send(const Data::String& interface, const Computing::Module& destination, const Messaging::Message& message = Messaging::Message()) const;
 
-                    const LocalModule& getModule() const;
+                    const Computing::LocalModule& getModule() const;
                 private:
-                    const LocalModule& module;
+                    const Computing::LocalModule& module;
             };
         }
     }

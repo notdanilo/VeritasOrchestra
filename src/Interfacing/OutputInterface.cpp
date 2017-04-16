@@ -8,6 +8,7 @@ using namespace Veritas;
 using namespace Orchestra;
 using namespace Messaging;
 using namespace Interfacing;
+using namespace Computing;
 
 using namespace Data;
 

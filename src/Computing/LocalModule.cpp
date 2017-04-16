@@ -11,6 +11,7 @@ using namespace Orchestra;
 using namespace Data;
 using namespace Messaging;
 using namespace Interfacing;
+using namespace Computing;
 
 const Interfacer& LocalModule::getInterfacer() {
     static Interfacer interfacer = Interfacer().set("Request", RequestInterface("Subscription"))

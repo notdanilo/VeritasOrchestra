@@ -21,7 +21,7 @@ namespace Veritas {
 
                 Computing::Runner runner;
 
-                Manager mainManager;
+                Computing::Manager mainManager;
 
                 typedef std::list<Computing::ParallelManager*> ParallelManagers;
                 ParallelManagers parallelManagers;

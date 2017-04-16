@@ -9,6 +9,7 @@ using namespace Orchestra;
 using namespace Data;
 using namespace Encoding;
 using namespace Messaging;
+using namespace Computing;
 
 Module::Module(const Address &address) : address(address) {}
 Module::Module(Address &&address) : address(std::move(address)) {}

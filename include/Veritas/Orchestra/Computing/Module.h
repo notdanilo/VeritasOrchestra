@@ -6,17 +6,19 @@
 
 namespace Veritas {
     namespace Orchestra {
-        class Module {
-            public:
-                Module(const Messaging::Address& address);
-                Module(Messaging::Address&& address);
-                virtual ~Module();
+        namespace Computing {
+            class Module {
+                public:
+                    Module(const Messaging::Address& address);
+                    Module(Messaging::Address&& address);
+                    virtual ~Module();
 
-                const Messaging::Address& getAddress() const;
+                    const Messaging::Address& getAddress() const;
 
-                bool operator==(const Module& module);
-            private:
-                Messaging::Address address;
-        };
+                    bool operator==(const Module& module);
+                private:
+                    Messaging::Address address;
+            };
+        }
     }
 }

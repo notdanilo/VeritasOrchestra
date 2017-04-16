@@ -5,6 +5,7 @@ using namespace Veritas;
 using namespace Orchestra;
 using namespace Interfacing;
 using namespace Messaging;
+using namespace Computing;
 
 Publisher::Publisher(const LocalModule *module) : Sender(module) {}
 Publisher::Publisher(const LocalModule& module) : Sender(module) {}

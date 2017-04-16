@@ -33,7 +33,7 @@ namespace Veritas {
                     const Interfaces* getInterfaces(const Data::String& group) const;
                     Interfaces* getInterfaces(const Data::String &group);
                 private:
-                    friend class Veritas::Orchestra::LocalModule;
+                    friend class Veritas::Orchestra::Computing::LocalModule;
                     Interfacer();
 
                     Groups groups;

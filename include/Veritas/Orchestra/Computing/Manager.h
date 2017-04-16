@@ -9,26 +9,25 @@
 
 namespace Veritas {
     namespace Orchestra {
-        class Manager {
-            public:
-                Manager();
-                Manager(const Manager& copy) = delete;
-                Manager(Manager&& move);
-                virtual ~Manager();
+        class VO;
+        namespace Computing {
+            class Manager {
+                public:
+                    Manager();
+                    Manager(const Manager& copy) = delete;
+                    Manager(Manager&& move);
+                    virtual ~Manager();
 
-                void operator=(const Manager& copy) = delete;
+                    void operator=(const Manager& copy) = delete;
 
-                bool isRunning() const;
-            protected:
-                virtual Routing::MessageQueue& getMessageQueue();
-                void finalize();
-                void run();
-            private:
-                friend class LocalModule;
-                friend class Interfacing::OutputInterface;
-                friend class VO;
+                    bool isRunning() const;
 
-                volatile std::atomic<bool> isrunning;
-        };
+                    virtual Routing::MessageQueue& getMessageQueue();
+                    void finalize();
+                    void run();
+                private:
+                    volatile std::atomic<bool> isrunning;
+            };
+        }
     }
 }

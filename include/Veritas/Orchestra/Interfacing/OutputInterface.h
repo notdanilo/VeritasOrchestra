@@ -4,7 +4,6 @@
 
 namespace Veritas {
     namespace Orchestra {
-        class Module;
         namespace Interfacing {
             class OutputInterface : public Interface {
                 public:
@@ -16,12 +15,12 @@ namespace Veritas {
                     OutputInterface& operator=(const OutputInterface& copy);
                     OutputInterface& operator=(OutputInterface&& move);
                 public:
-                    void send(const LocalModule& origin, const Module& destiny, const Messaging::Message& message) const;
-                    void send(const LocalModule& origin, const Module* destiny, const Messaging::Message& message) const;
-                    void send(const LocalModule* origin, const Module& destiny, const Messaging::Message& message) const;
-                    void send(const LocalModule* origin, const Module* destiny, const Messaging::Message& message) const;
-                    void publish(const LocalModule& origin, const Messaging::Message& message) const;
-                    void publish(const LocalModule* origin, const Messaging::Message& message) const;
+                    void send(const Computing::LocalModule& origin, const Computing::Module& destiny, const Messaging::Message& message) const;
+                    void send(const Computing::LocalModule& origin, const Computing::Module* destiny, const Messaging::Message& message) const;
+                    void send(const Computing::LocalModule* origin, const Computing::Module& destiny, const Messaging::Message& message) const;
+                    void send(const Computing::LocalModule* origin, const Computing::Module* destiny, const Messaging::Message& message) const;
+                    void publish(const Computing::LocalModule& origin, const Messaging::Message& message) const;
+                    void publish(const Computing::LocalModule* origin, const Messaging::Message& message) const;
             };
         }
     }
