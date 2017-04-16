@@ -30,6 +30,7 @@ namespace Veritas {
                 Modules subscribers;
                 void receive(const Messaging::Message& message);
 
+                void InterfaceGroupsRequest(const Messaging::Message& message, const Interfacing::Replier& replier);
                 void InterfacesRequest(const Messaging::Message& message, const Interfacing::Replier& replier);
                 void SubscriptionRequest(const Messaging::Message& message, const Interfacing::Replier& replier);
                 void UnsubscriptionRequest(const Messaging::Message& message, const Interfacing::Replier& replier);

@@ -36,5 +36,6 @@ void ReplyInterface::onSet(Interfacer *interfacer) {
 }
 
 void ReplyInterface::Request(const Message &message) {
-    if (callback) callback(Message(message).set(message.get("Content")), Replier(message));
+    const Form& form = message.getContent();
+    if (callback) callback(Message(message).set(form.get("Content")), Replier(message));
 }

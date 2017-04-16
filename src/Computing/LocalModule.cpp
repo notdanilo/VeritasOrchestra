@@ -17,6 +17,7 @@ const Interfacer& LocalModule::getInterfacer() {
                                                .set("Request", RequestInterface("Unsubscription"))
                                                .set("Reply", ReplyInterface("Subscription", &LocalModule::SubscriptionRequest))
                                                .set("Reply", ReplyInterface("Unsubscription", &LocalModule::UnsubscriptionRequest))
+                                               .set("Reply", ReplyInterface("InterfaceGroups", &LocalModule::InterfaceGroupsRequest))
                                                .set("Reply", ReplyInterface("Interfaces", &LocalModule::InterfacesRequest));
     return interfacer;
 }
@@ -60,8 +61,38 @@ void LocalModule::UnsubscriptionRequest(const Message& message, const Replier& r
     replier.reply();
 }
 
+void LocalModule::InterfaceGroupsRequest(const Message& message, const Replier& replier) {
+    List list;
+
+    const Interfacer& interfacer = getClassInterfacer();
+    const Interfacer::Groups& groups = interfacer.getGroups();
+
+    list.setSize(groups.size());
+    uint32 i = 0;
+    for (auto& group : groups)
+        list[i++] = group.first;
+
+    replier.reply(Message().set(list));
+}
+
 void LocalModule::InterfacesRequest(const Message &message, const Replier &replier) {
-    replier.reply();
+    const Form& contents = message.getContent();
+    const String& group = contents.get("Group");
+
+    const Interfacer& interfacer = getClassInterfacer();
+    const Interfacer::Interfaces* interfaces = interfacer.getInterfaces(group);
+
+    List list;
+    list.setSize(interfaces->size());
+    uint32 i = 0;
+    for (auto interface : *interfaces)
+        list[i++] = interface.first;
+
+    Form form;
+    form.set("Group", group);
+    form.set("Interfaces", std::move(list));
+
+    replier.reply(Message().set(std::move(form)));
 }
 
 const LocalModule::Modules& LocalModule::getSubscribers() const { return subscribers; }

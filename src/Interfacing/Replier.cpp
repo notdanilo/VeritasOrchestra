@@ -18,12 +18,12 @@ String extract(const String& string) {
 }
 
 Replier::Replier(const Message &message)
-    : requestID((Number) message.get("RequestID"))
+    : requestID((Number) ((const Form&) message.getContent()).get("RequestID"))
     , origin(message.getOrigin())
     , sender((LocalModule*) message.getDestiny().getLocalAddress())
     , interface(extract(message.getInterface()))
 {}
 
 void Replier::reply(const Message &message) const {
-    sender.send(interface, Module(origin), Message().set("RequestID", requestID).set("Content", message.getContent()));
+    sender.send(interface, Module(origin), Message().set(Form().set("RequestID", requestID).set("Content", message.getContent())));
 }

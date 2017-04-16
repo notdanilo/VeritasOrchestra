@@ -12,6 +12,7 @@ namespace Veritas {
             class Interfacer {
                 public:
                     typedef std::map<Data::String, Interface&> Interfaces;
+                    typedef std::map<Data::String, Interfaces> Groups;
 
                     Interfacer(const Interfacer& copy);
                     Interfacer(Interfacer&& move);
@@ -19,6 +20,9 @@ namespace Veritas {
 
                     Interfacer& operator=(const Interfacer& copy);
                     Interfacer& operator=(Interfacer&& move);
+
+                    Groups& getGroups();
+                    const Groups& getGroups() const;
 
                     template <class T>
                     Interfacer& set(const Data::String& group, T&& t) {
@@ -32,8 +36,7 @@ namespace Veritas {
                     friend class Veritas::Orchestra::LocalModule;
                     Interfacer();
 
-                    typedef std::map<Data::String, Interfaces> Group;
-                    Group groups;
+                    Groups groups;
 
                     void erase();
                     Interfacer& set(const Data::String& group, Interface* interface);

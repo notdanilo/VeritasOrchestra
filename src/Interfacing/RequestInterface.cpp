@@ -53,19 +53,20 @@ void RequestInterface::request(const LocalModule &origin, const Module &destiny,
     outputInterface.send(origin, destiny,
                         Message().setOrigin(message.getOrigin())
                                  .setDestiny(message.getDestiny())
-                                 .set("RequestID", requestID)
-                                 .set("Content", message.getContent()));
+                                 .set(Form().set("RequestID", requestID)
+                                            .set("Content", message.getContent())));
 }
 
 void RequestInterface::Reply(const Message &message) {
     if (callback) {
         try {
-            uint32 requestID = (Number) message.get("RequestID");
+            const Form& form = message.getContent();
+            uint32 requestID = (Number) form.get("RequestID");
             const any& context = contextes.at(requestID);
             callback(Message().setDestiny(message.getDestiny())
                             .setOrigin(message.getOrigin())
                             .setInterface(message.getInterface())
-                            .set(message.get("Content")), context);
+                            .set(form.get("Content")), context);
             contextes.erase(requestID);
         } catch (...) {}
     }
