@@ -22,22 +22,8 @@ Message& Message::set(Content&& content) {
     return *this;
 }
 
-Message& Message::set(const String& field, const Content& content) {
-    if (getContent().getType() != Content::FORM) set(Form());
-    ((Form&) this->content).set(field, content);
-    return *this;
-}
-Message& Message::set(const String& field, Content&& content) {
-    if (getContent().getType() != Content::FORM) set(Form());
-    ((Form&) this->content).set(field, std::move(content));
-    return *this;
-}
-
 Content& Message::getContent() { return content; }
 const Content& Message::getContent() const { return content; }
-const Content& Message::get(const String& field) const {
-    return content.getType() ? ((const Form&) content).get(field) : Content::Empty;
-}
 
 Message& Message::setOrigin(const Address& origin) {
     this->origin = origin;

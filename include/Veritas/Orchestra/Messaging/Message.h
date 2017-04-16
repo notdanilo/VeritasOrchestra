@@ -32,12 +32,6 @@ namespace Veritas {
                     Message& set(Content&& content);
                     const Content& getContent() const;
                     Content& getContent();
-
-                    // Remove these three methods:
-                    Message& set(const String& field, const Content& content);
-                    Message& set(const String& field, Content&& content);
-                    template <class T> Message& set(const String& field, T&& content) { return set(field, Content(std::forward<T>(content))); }
-                    const Content& get(const String& field) const;
                 private:
                     Address origin, destiny;
                     Content content;
