@@ -21,10 +21,10 @@ namespace Veritas {
                     RequestInterface& operator=(RequestInterface&& move);
                 private:
                     friend class Requester;
-                    void request(const Computing::LocalModule& origin, const Computing::Module& destiny, const Messaging::Message& message, const any& context);
-                    void request(const Computing::LocalModule& origin, const Computing::Module* destiny, const Messaging::Message& message, const any& context);
-                    void request(const Computing::LocalModule* origin, const Computing::Module& destiny, const Messaging::Message& message, const any& context);
-                    void request(const Computing::LocalModule* origin, const Computing::Module* destiny, const Messaging::Message& message, const any& context);
+                    void request(const Computing::LocalModule& origin, const Computing::Module& destiny, const Messaging::Content& content, const any& context);
+                    void request(const Computing::LocalModule& origin, const Computing::Module* destiny, const Messaging::Content& content, const any& context);
+                    void request(const Computing::LocalModule* origin, const Computing::Module& destiny, const Messaging::Content& content, const any& context);
+                    void request(const Computing::LocalModule* origin, const Computing::Module* destiny, const Messaging::Content& content, const any& context);
 
                     void onSet(Interfacer *interfacer);
 

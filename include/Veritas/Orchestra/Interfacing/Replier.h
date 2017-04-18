@@ -9,7 +9,7 @@ namespace Veritas {
             class Replier {
                 public:
                     Replier(const Messaging::Message& message);
-                    void reply(const Messaging::Message& message = Messaging::Message()) const;
+                    void reply(const Messaging::Content& content = Messaging::Content()) const;
                 private:
                     Sender sender;
                     uint32 requestID;

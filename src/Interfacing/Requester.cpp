@@ -10,10 +10,10 @@ using namespace Computing;
 Requester::Requester(LocalModule* module) : Requester(*module) {}
 Requester::Requester(LocalModule& module) : sender(module) {}
 
-void Requester::request(const String& interface, const Module *destination, const Message &message, const any& context) { request(interface, *destination, message, context); }
-void Requester::request(const String& interface, const Module &destination, const Message &message, const any& context) {
+void Requester::request(const String& interface, const Module *destination, const Content &content, const any& context) { request(interface, *destination, content, context); }
+void Requester::request(const String& interface, const Module &destination, const Content &content, const any& context) {
     RequestInterface& requestInterface((RequestInterface&) sender.getModule().getClassInterfacer().getInterfaces("Request")->at(interface));
-    requestInterface.request(sender.getModule(), destination, message, context);
+    requestInterface.request(sender.getModule(), destination, content, context);
 }
 
 const LocalModule& Requester::getModule() const { return sender.getModule(); }

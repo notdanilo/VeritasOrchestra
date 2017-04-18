@@ -11,8 +11,8 @@ namespace Veritas {
                 public:
                     Requester(Computing::LocalModule& module);
                     Requester(Computing::LocalModule* module);
-                    void request(const Data::String& interface, const Computing::Module* module, const Messaging::Message& message = Messaging::Message(), const any& context = any());
-                    void request(const Data::String& interface, const Computing::Module& module, const Messaging::Message& message = Messaging::Message(), const any& context = any());
+                    void request(const Data::String& interface, const Computing::Module* module, const Messaging::Content& content = Messaging::Content(), const any& context = any());
+                    void request(const Data::String& interface, const Computing::Module& module, const Messaging::Content& content = Messaging::Content(), const any& context = any());
 
                     const Computing::LocalModule& getModule() const;
                 private:

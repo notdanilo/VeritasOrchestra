@@ -17,12 +17,12 @@ OutputInterface::OutputInterface(const OutputInterface &copy) : Interface(copy) 
 OutputInterface::OutputInterface(OutputInterface &&move) : Interface(std::move(move)) {}
 OutputInterface::~OutputInterface() {}
 
-void OutputInterface::send(const LocalModule *origin, const Module *destiny, const Message &message) const { send(*origin, *destiny, message); }
-void OutputInterface::send(const LocalModule &origin, const Module *destiny, const Message &message) const { send(origin, *destiny, message); }
-void OutputInterface::send(const LocalModule *origin, const Module &destiny, const Message &message) const { send(*origin, destiny, message); }
-void OutputInterface::send(const LocalModule &origin, const Module &destiny, const Message &message) const {
+void OutputInterface::send(const LocalModule *origin, const Module *destiny, const Content &content) const { send(*origin, *destiny, content); }
+void OutputInterface::send(const LocalModule &origin, const Module *destiny, const Content &content) const { send( origin, *destiny, content); }
+void OutputInterface::send(const LocalModule *origin, const Module &destiny, const Content &content) const { send(*origin,  destiny, content); }
+void OutputInterface::send(const LocalModule &origin, const Module &destiny, const Content &content) const {
     VO::getInstance().getMessageQueue().receive(Message().setInterface(getName())
                                                 .setOrigin(origin.getAddress())
                                                 .setDestiny(destiny.getAddress())
-                                                .set(message.getContent()));
+                                                .set(content));
 }

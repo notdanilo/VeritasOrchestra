@@ -23,14 +23,8 @@ const Interfacer& LocalModule::getInterfacer() {
     return interfacer;
 }
 
-LocalModule& LocalModule::from(const Address &address) {
-    return *((LocalModule*) address.getLocalAddress());
-}
-
 LocalModule::LocalModule() : LocalModule(getInterfacer()) {}
-
 LocalModule::LocalModule(const Interfacer& interfacerRef) : Module(this), interfacerRef(interfacerRef) {}
-
 LocalModule::~LocalModule() {}
 
 void LocalModule::receive(const Message &message) {
@@ -73,7 +67,7 @@ void LocalModule::InterfaceGroupsRequest(const Message& message, const Replier& 
     for (auto& group : groups)
         list[i++] = group.first;
 
-    replier.reply(Message().set(list));
+    replier.reply(list);
 }
 
 void LocalModule::InterfacesRequest(const Message &message, const Replier &replier) {
@@ -93,7 +87,7 @@ void LocalModule::InterfacesRequest(const Message &message, const Replier &repli
     form.set("Group", group);
     form.set("Interfaces", std::move(list));
 
-    replier.reply(Message().set(std::move(form)));
+    replier.reply(form);
 }
 
 const LocalModule::Modules& LocalModule::getSubscribers() const { return subscribers; }

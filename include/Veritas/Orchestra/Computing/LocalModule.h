@@ -16,8 +16,6 @@ namespace Veritas {
                 public:
                     typedef std::vector<Module> Modules;
 
-                    static LocalModule& from(const Messaging::Address& address);
-
                     LocalModule();
                     LocalModule(const Interfacing::Interfacer& interfacer);
                     ~LocalModule();

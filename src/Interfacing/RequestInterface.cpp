@@ -43,19 +43,15 @@ void RequestInterface::onSet(Interfacer *interfacer) {
 
 uint32 RequestInterface::getRequestID() { return requestID++; }
 
-void RequestInterface::request(const LocalModule *origin, const Module *destiny, const Message &message, const any& context) { request(*origin, *destiny, message, context); }
-void RequestInterface::request(const LocalModule &origin, const Module *destiny, const Message &message, const any& context) { request(origin, *destiny, message, context); }
-void RequestInterface::request(const LocalModule *origin, const Module &destiny, const Message &message, const any& context) { request(*origin, destiny, message, context); }
-void RequestInterface::request(const LocalModule &origin, const Module &destiny, const Message &message, const any& context) {
+void RequestInterface::request(const LocalModule *origin, const Module *destiny, const Content &content, const any& context) { request(*origin, *destiny, content, context); }
+void RequestInterface::request(const LocalModule &origin, const Module *destiny, const Content &content, const any& context) { request(origin, *destiny, content, context); }
+void RequestInterface::request(const LocalModule *origin, const Module &destiny, const Content &content, const any& context) { request(*origin, destiny, content, context); }
+void RequestInterface::request(const LocalModule &origin, const Module &destiny, const Content &content, const any& context) {
     uint32 requestID = getRequestID();
     contextes.emplace(requestID, context);
 
     const OutputInterface& outputInterface = (const OutputInterface&) origin.getClassInterfacer().getInterfaces("Output")->at(String("Request-") + getName());
-    outputInterface.send(origin, destiny,
-                        Message().setOrigin(message.getOrigin())
-                                 .setDestiny(message.getDestiny())
-                                 .set(Form().set("RequestID", requestID)
-                                            .set("Content", message.getContent())));
+    outputInterface.send(origin, destiny, Form().set("RequestID", requestID).set("Content", content));
 }
 
 void RequestInterface::Reply(const Message &message) {

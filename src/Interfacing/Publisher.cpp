@@ -10,7 +10,7 @@ using namespace Computing;
 Publisher::Publisher(const LocalModule *module) : Sender(module) {}
 Publisher::Publisher(const LocalModule& module) : Sender(module) {}
 
-void Publisher::publish(const String& interface, const Message &message) const {
+void Publisher::publish(const String& interface, const Content& content) const {
     for (const Module& subscriber : getModule().getSubscribers())
-        send(interface, subscriber, message);
+        send(interface, subscriber, content);
 }

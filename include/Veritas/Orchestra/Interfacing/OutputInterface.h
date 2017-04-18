@@ -14,13 +14,11 @@ namespace Veritas {
 
                     OutputInterface& operator=(const OutputInterface& copy);
                     OutputInterface& operator=(OutputInterface&& move);
-                public:
-                    void send(const Computing::LocalModule& origin, const Computing::Module& destiny, const Messaging::Message& message) const;
-                    void send(const Computing::LocalModule& origin, const Computing::Module* destiny, const Messaging::Message& message) const;
-                    void send(const Computing::LocalModule* origin, const Computing::Module& destiny, const Messaging::Message& message) const;
-                    void send(const Computing::LocalModule* origin, const Computing::Module* destiny, const Messaging::Message& message) const;
-                    void publish(const Computing::LocalModule& origin, const Messaging::Message& message) const;
-                    void publish(const Computing::LocalModule* origin, const Messaging::Message& message) const;
+
+                    void send(const Computing::LocalModule& origin, const Computing::Module& destiny, const Messaging::Content& content) const;
+                    void send(const Computing::LocalModule& origin, const Computing::Module* destiny, const Messaging::Content& content) const;
+                    void send(const Computing::LocalModule* origin, const Computing::Module& destiny, const Messaging::Content& content) const;
+                    void send(const Computing::LocalModule* origin, const Computing::Module* destiny, const Messaging::Content& content) const;
             };
         }
     }

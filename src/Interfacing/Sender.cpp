@@ -12,10 +12,10 @@ using namespace Data;
 Sender::Sender(const LocalModule *module) : Sender(*module) {}
 Sender::Sender(const LocalModule& module) : module(module) {}
 
-void Sender::send(const String& interface, const Module *destination, const Message &message) const { send(interface, *destination, message); }
-void Sender::send(const String& interface, const Module &destination, const Message &message) const {
+void Sender::send(const String& interface, const Module *destination, const Content &content) const { send(interface, *destination, content); }
+void Sender::send(const String& interface, const Module &destination, const Content &content) const {
     const OutputInterface& outputInterface = (const OutputInterface&) module.getClassInterfacer().getInterfaces("Output")->at(interface);
-    outputInterface.send(this->module, destination, message);
+    outputInterface.send(this->module, destination, content);
 }
 
 const LocalModule& Sender::getModule() const { return module; }

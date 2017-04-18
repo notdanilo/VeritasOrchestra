@@ -8,8 +8,8 @@ namespace Veritas {
                 public:
                     Sender(const Computing::LocalModule& module);
                     Sender(const Computing::LocalModule* module);
-                    void send(const Data::String& interface, const Computing::Module* destination, const Messaging::Message& message = Messaging::Message()) const;
-                    void send(const Data::String& interface, const Computing::Module& destination, const Messaging::Message& message = Messaging::Message()) const;
+                    void send(const Data::String& interface, const Computing::Module* destination, const Messaging::Content& content = Messaging::Content()) const;
+                    void send(const Data::String& interface, const Computing::Module& destination, const Messaging::Content& content = Messaging::Content()) const;
 
                     const Computing::LocalModule& getModule() const;
                 private:

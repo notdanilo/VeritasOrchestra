@@ -25,6 +25,6 @@ Replier::Replier(const Message &message)
     , interface(extract(message.getInterface()))
 {}
 
-void Replier::reply(const Message &message) const {
-    sender.send(interface, Module(origin), Message().set(Form().set("RequestID", requestID).set("Content", message.getContent())));
+void Replier::reply(const Content &content) const {
+    sender.send(interface, Module(origin), Form().set("RequestID", requestID).set("Content", content));
 }

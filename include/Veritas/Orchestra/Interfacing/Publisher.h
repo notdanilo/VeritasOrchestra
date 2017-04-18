@@ -9,7 +9,7 @@ namespace Veritas {
                     Publisher(const Computing::LocalModule& module);
                     Publisher(const Computing::LocalModule* module);
 
-                    void publish(const Data::String& interface, const Messaging::Message& message = Messaging::Message()) const;
+                    void publish(const Data::String& interface, const Messaging::Content &content = Messaging::Content()) const;
             };
         }
     }
